@@ -1,0 +1,13 @@
+---
+dc_first_domain_controller: true
+
+dc_domain_name: test.loc
+dc_domain_admin_user: vagrant@test.loc
+dc_domain_admin_password: vagrant
+
+dc_dns_forwarders:
+  - '8.8.8.8'
+  - '4.2.2.2'
+
+dc_dns_servers:
+  - '127.0.0.1'

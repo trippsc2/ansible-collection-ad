@@ -1,0 +1,29 @@
+---
+- name: Set network to Private
+  ansible.windows.win_powershell:
+    script: |
+      $Ansible.Changed = $false
+
+      $profile = Get-NetConnectionProfile
+
+      if ($profile.NetworkCategory -eq 'Public') {
+        $Ansible.Changed = $true
+        $profile | Set-NetConnectionProfile -NetworkCategory Private
+      }
+  
+- name: Set DNS to DC address
+  ansible.windows.win_dns_client:
+    adapter_names: '*'
+    dns_servers:
+      - "{{ dc_ip_address }}"
+
+- name: Register host in DNS
+  when:
+    - dns_register_host
+  delegate_to: "{{ dc_inventory_name }}"
+  community.windows.win_dns_record:
+    name: "{{ dns_host_name }}"
+    type: A
+    value: "{{ dns_ip_address }}"
+    zone: "{{ domain_name }}"
+    state: present

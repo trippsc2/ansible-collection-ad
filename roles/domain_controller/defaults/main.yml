@@ -1,0 +1,18 @@
+---
+dc_vault_create_mount_point: true
+dc_vault_managed_safe_mode_password: true
+
+dc_vault_safe_mode_mount_point: os
+dc_vault_safe_mode_path: "{{ inventory_hostname | lower }}/safe_mode"
+
+dc_first_domain_controller: false
+
+dc_dns_forwarders:
+  - '8.8.8.8'
+  - '4.2.2.2'
+
+dc_is_domain_naming_master: false
+dc_is_schema_master: false
+dc_is_infrastructure_master: false
+dc_is_pdc_emulator: false
+dc_is_rid_master: false

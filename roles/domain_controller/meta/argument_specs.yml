@@ -1,0 +1,124 @@
+---
+argument_specs:
+  main:
+    short_description: Domain Controller
+    description:
+      - This role configures the Windows Server machine as an Active Directory Domain Controller.
+    author: Jim Tarpley
+    options:
+      dc_vault_create_mount_point:
+        type: bool
+        required: false
+        default: true
+        description:
+          - Whether to create the KV version 2 mount point in HashiCorp Vault for the safe mode password.
+      dc_vault_managed_safe_mode_password:
+        type: bool
+        required: false
+        default: true
+        description:
+          - Whether to manage the safe mode password in HashiCorp Vault.
+      dc_vault_safe_mode_mount_point:
+        type: str
+        required: false
+        default: os
+        description:
+          - The KV version 2 mount point in HashiCorp Vault for the safe mode password.
+      dc_vault_safe_mode_path:
+        type: str
+        required: false
+        default: "{{ inventory_hostname }}/safe_mode"
+        description:
+          - The path within the mount point in HashiCorp Vault for the safe mode password.
+      dc_safe_mode_password:
+        type: str
+        required: false
+        no_log: true
+        description:
+          - The safe mode password for the domain controller.
+          - If `dc_vault_managed_safe_mode_password` is `true`, this value is ignored.
+      dc_first_domain_controller:
+        type: bool
+        required: false
+        default: false
+        description:
+          - Whether the server is the first domain controller in the domain.
+      dc_domain_name:
+        type: str
+        required: true
+        description:
+          - The name of the domain to which the domain controller will belong.
+      dc_domain_admin_user:
+        type: str
+        required: true
+        description:
+          - The user account to use for configuring the domain controller.
+      dc_domain_admin_password:
+        type: str
+        required: true
+        no_log: true
+        description:
+          - The password for the user account to use for configuring the domain controller.
+      dc_database_path:
+        type: path
+        required: false
+        default: C:\Windows\NTDS
+        description:
+          - The path to the database files for the domain controller.
+      dc_domain_log_path:
+        type: path
+        required: false
+        default: C:\Windows\Logs
+        description:
+          - The path to the log files for the domain controller.
+      dc_sysvol_path:
+        type: path
+        required: false
+        default: C:\Windows\SYSVOL
+        description:
+          - The path to the SYSVOL files for the domain controller.
+      dc_dns_forwarders:
+        type: list
+        elements: str
+        required: false
+        default:
+          - '8.8.8.8'
+          - '4.2.2.2'
+        description:
+          - A list of DNS forwarders for the domain controller.
+      dc_dns_servers:
+        type: list
+        elements: str
+        required: true
+        description:
+          - A list of DNS servers for the domain controller.
+      dc_is_domain_naming_master:
+        type: bool
+        required: false
+        default: false
+        description:
+          - Whether the domain controller is the domain naming master.
+      dc_is_schema_master:
+        type: bool
+        required: false
+        default: false
+        description:
+          - Whether the domain controller is the schema master.
+      dc_is_infrastructure_master:
+        type: bool
+        required: false
+        default: false
+        description:
+          - Whether the domain controller is the infrastructure master.
+      dc_is_pdc_emulator:
+        type: bool
+        required: false
+        default: false
+        description:
+          - Whether the domain controller is the PDC emulator.
+      dc_is_rid_master:
+        type: bool
+        required: false
+        default: false
+        description:
+          - Whether the domain controller is the RID master.

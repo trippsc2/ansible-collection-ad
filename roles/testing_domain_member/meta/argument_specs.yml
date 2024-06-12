@@ -1,0 +1,68 @@
+---
+argument_specs:
+  main:
+    short_description: Join Testing Active Directory Domain
+    description:
+      - This role joins a Windows machine to a test Active Directory Domain during Molecule testing.
+    author: Jim Tarpley
+    options:
+      non_domain_user:
+        description:
+          - The user from which to run the Ansible tasks before joining the domain.
+        type: str
+        required: false
+        default: vagrant
+      dc_inventory_name:
+        description:
+          - The Ansible inventory name of the test domain controller.
+        type: str
+        required: false
+        default: dc
+      dc_ip_address:
+        description:
+          - The IP address of the test domain controller.
+        type: str
+        required: false
+        default: "{{ hostvars[dc_inventory_name].ansible_host }}"
+      domain_name:
+        description:
+          - The name of the domain to join.
+        type: str
+        required: false
+        default: test.loc
+      domain_join_username:
+        description:
+          - The username to use to join the domain.
+        type: str
+        required: false
+        default: "vagrant@{{ domain_name }}"
+      domain_join_password:
+        description:
+          - The password to use to join the domain.
+        type: str
+        required: false
+        default: vagrant
+      domain_join_hostname:
+        description:
+          - The hostname of the joining machine.
+        type: str
+        required: false
+        default: "{{ inventory_hostname }}"
+      dc_copy_ssh_key_from_local_user:
+        description:
+          - Whether to create a profile for the domain user and copy the SSH key from the local user.
+        type: bool
+        required: false
+        default: true
+      dns_register_host:
+        description:
+          - Whether to register the hostname in DNS.
+        type: bool
+        required: false
+        default: true
+      dns_ip_address:
+        description:
+          - The IP address to register in DNS.
+        type: str
+        required: false
+        default: "{{ ansible_host }}"

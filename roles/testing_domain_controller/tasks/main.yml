@@ -1,0 +1,53 @@
+---
+- name: If the domain controller is not already installed, install it
+  when:
+    - not (ansible_windows_domain_role | regex_search('(domain controller)'))
+  block:
+    - name: Set DNS server on all interfaces to public DNS temporarily
+      ansible.windows.win_dns_client:
+        adapter_names: '*'
+        ipv4_addresses: "{{ dc_initial_dns_servers }}"
+
+    - name: Install Active Directory Domain Services role
+      ansible.windows.win_feature:
+        name:
+          - AD-Domain-Services
+        include_management_tools: true
+        include_sub_features: true
+        state: present
+
+    - name: Promote server to domain controller
+      microsoft.ad.domain:
+        dns_domain_name: "{{ domain_name }}"
+        install_dns: true
+        safe_mode_password: "{{ dc_safe_mode_password }}"
+      register: _create_domain
+
+    - name: Reboot
+      when:
+        - _create_domain.reboot_required
+      ansible.windows.win_reboot:
+    
+    - name: Disable default GPOs
+      ansible.windows.win_powershell:
+        script: |
+          Set-GPLink -Name 'Default Domain Controllers Policy' -Target 'OU=Domain Controllers,{{ domain_base_dn }}' -LinkEnabled No -Enforced No
+          Set-GPLink -Name 'Default Domain Policy' -Target '{{ domain_base_dn }}' -LinkEnabled No -Enforced No
+
+- name: Set DNS server on all interfaces to localhost
+  ansible.windows.win_dns_client:
+    adapter_names: '*'
+    ipv4_addresses:
+      - '127.0.0.1'
+
+- name: Ensure domain admin user is configured
+  microsoft.ad.user:
+    name: "{{ dc_domain_admin_username }}"
+    groups:
+      add:
+        - Administrators
+        - Domain Admins
+        - Enterprise Admins
+        - Schema Admins
+    password: "{{ dc_domain_admin_password | default(omit) }}"
+    state: present

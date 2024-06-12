@@ -1,0 +1,12 @@
+---
+- name: Verify
+  hosts:
+    - dc
+  tasks:
+    - name: Verify that the domain controller is promoted
+      ansible.builtin.assert:
+        that:
+          - ansible_windows_domain_role | regex_search('(domain controller)')
+          - ansible_windows_domain == 'test.loc'
+        fail_msg: The domain controller is not promoted
+        success_msg: The domain controller is promoted

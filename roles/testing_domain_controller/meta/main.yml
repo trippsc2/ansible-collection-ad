@@ -1,0 +1,21 @@
+---
+galaxy_info:
+  author: Jim Tarpley
+  namespace: trippsc2
+  role_name: testing_domain_controller
+  description: This role creates an Active Directory domain on the Windows machine for use during Molecule testing.
+  license: MIT
+
+  min_ansible_version: '2.14'
+
+  platforms:
+  - name: Windows
+    versions:
+      - '2019'
+      - '2022'
+
+collections:
+  - ansible.windows
+  - microsoft.ad
+
+dependencies: []

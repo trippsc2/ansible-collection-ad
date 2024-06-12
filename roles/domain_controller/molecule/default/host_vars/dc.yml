@@ -1,0 +1,20 @@
+---
+ansible_user: TEST\vagrant
+
+dc_domain_name: test.loc
+dc_domain_admin_user: vagrant@test.loc
+dc_domain_admin_password: vagrant
+
+dc_dns_forwarders:
+  - '8.8.8.8'
+  - '4.2.2.2'
+
+dc_dns_servers:
+  - "{{ hostvars['existingdc'].ansible_host }}"
+  - '127.0.0.1'
+
+dc_is_domain_naming_master: true
+dc_is_schema_master: true
+dc_is_infrastructure_master: true
+dc_is_pdc_emulator: true
+dc_is_rid_master: true

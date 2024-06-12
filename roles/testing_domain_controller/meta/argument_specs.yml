@@ -1,0 +1,47 @@
+---
+argument_specs:
+  main:
+    short_description: Create Testing Active Directory Domain
+    description:
+      - This role creates an Active Directory domain on the Windows machine for use during Molecule testing.
+    author: Jim Tarpley
+    options:
+      dc_initial_dns_servers:
+        description:
+          - List of initial DNS servers to use when creating the domain.
+        type: list
+        elements: str
+        required: false
+        default: 
+          - '8.8.8.8'
+          - '1.1.1.1'
+      domain_name:
+        description:
+          - The name of the domain to create.
+        type: str
+        required: false
+        default: test.loc
+      dc_safe_mode_password:
+        description:
+          - The password to use for the domain in safe mode.
+        type: str
+        required: false
+        default: SecurePassword123!
+      dc_domain_admin_username:
+        description:
+          - The username to which to give all administrative rights for the domain.
+        type: str
+        required: false
+        default: vagrant
+      dc_domain_admin_password:
+        description:
+          - The password for the domain admin user.
+          - If not provided, the domain admin user must already exist.
+        type: str
+        required: false
+      domain_base_dn:
+        description:
+          - The base DN for the domain.
+        type: str
+        required: false
+        default: DC=test,DC=loc

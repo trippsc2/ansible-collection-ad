@@ -1,0 +1,6 @@
+---
+- name: Prepare
+  hosts:
+    - dc
+  roles:
+    - role: trippsc2.ad.testing_domain_controller

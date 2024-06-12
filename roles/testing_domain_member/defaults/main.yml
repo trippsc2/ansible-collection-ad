@@ -1,0 +1,15 @@
+---
+non_domain_user: vagrant
+
+dc_inventory_name: dc
+dc_ip_address: "{{ hostvars[dc_inventory_name].ansible_host }}"
+
+domain_name: test.loc
+domain_join_username: "vagrant@{{ domain_name }}"
+domain_join_password: vagrant
+domain_join_hostname: "{{ inventory_hostname }}"
+
+dc_copy_ssh_key_from_local_user: true
+
+dns_register_host: true
+dns_ip_address: "{{ ansible_host }}"

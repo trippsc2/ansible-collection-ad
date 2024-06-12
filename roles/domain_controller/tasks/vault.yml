@@ -1,0 +1,40 @@
+---
+- name: Create Vault safe mode mount point
+  when:
+    - dc_vault_create_mount_point
+  delegate_to: localhost
+  trippsc2.hashi_vault.vault_kv2_secret_engine:
+    token: "{{ vault_token | default(omit) }}"
+    url: "{{ vault_url | default(omit) }}"
+    engine_mount_point: "{{ dc_vault_safe_mode_mount_point }}"
+    state: present
+
+- name: Get Vault safe mode password
+  block:
+    - name: Try to get Vault safe mode password
+      delegate_to: localhost
+      community.hashi_vault.vault_kv2_get:
+        token: "{{ vault_token | default(omit) }}"
+        url: "{{ vault_url | default(omit) }}"
+        engine_mount_point: "{{ dc_vault_safe_mode_mount_point }}"
+        path: "{{ dc_vault_safe_mode_path }}"
+      register: _vault_secret
+
+    - name: Set safe mode password variable
+      ansible.builtin.set_fact:
+        dc_safe_mode_password: _vault_secret.secret.password
+  rescue:
+    - name: Generate new password
+      ansible.builtin.set_fact:
+        dc_safe_mode_password: >-
+          {{ lookup('ansible.builtin.password', '/dev/null chars=ascii_lowercase,ascii_uppercase,digits,punctuation length=20') }}
+
+    - name: Store Vault secret
+      delegate_to: localhost
+      community.hashi_vault.vault_kv2_write:
+        token: "{{ vault_token | default(omit) }}"
+        url: "{{ vault_url | default(omit) }}"
+        engine_mount_point: "{{ dc_vault_safe_mode_mount_point }}"
+        path: "{{ dc_vault_safe_mode_path }}"
+        data:
+          password: "{{ dc_safe_mode_password }}"

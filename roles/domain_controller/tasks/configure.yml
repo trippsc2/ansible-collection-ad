@@ -1,0 +1,28 @@
+---
+- name: Set DNS server forwarder
+  ansible.windows.win_dsc:
+    resource_name: DnsServerForwarder
+    IsSingleInstance: 'Yes'
+    IPAddresses: "{{ dc_dns_forwarders }}"
+    UseRootHint: true
+    EnableReordering: true
+    Timeout: 5
+
+- name: Set DNS server on all interfaces to localhost
+  ansible.windows.win_dns_client:
+    adapter_names: '*'
+    dns_servers: "{{ dc_dns_servers }}"
+
+- name: Assign FSMO roles
+  when:
+    - _dc_fsmo_roles_value | length > 0
+  ansible.windows.win_dsc:
+    resource_name: ADDomainController
+    DomainName: "{{ dc_domain_name }}"
+    Credential_username: "{{ dc_domain_admin_user }}"
+    Credential_password: "{{ dc_domain_admin_password }}"
+    SafeModeAdministratorPassword_username: Administrator
+    SafeModeAdministratorPassword_password: "{{ dc_safe_mode_password }}"
+    FlexibleSingleMasterOperationRole: "{{ _dc_fsmo_roles_value }}"
+  retries: 20
+  delay: 30

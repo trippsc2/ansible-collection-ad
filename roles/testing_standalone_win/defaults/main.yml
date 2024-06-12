@@ -1,0 +1,8 @@
+---
+dc_inventory_name: dc
+dc_ip_address: "{{ hostvars[dc_inventory_name].ansible_host }}"
+domain_name: test.loc
+
+dns_register_host: true
+dns_host_name: "{{ inventory_hostname }}"
+dns_ip_address: "{{ ansible_host }}"

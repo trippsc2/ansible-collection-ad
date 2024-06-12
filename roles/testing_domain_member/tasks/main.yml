@@ -1,0 +1,107 @@
+---
+- name: Gathering Facts
+  when:
+    - ansible_windows_domain_role is not defined
+  vars:
+    ansible_user: "{{ non_domain_user }}"
+  ansible.builtin.setup:
+
+- name: If the domain is not joined, join it
+  when:
+    - ('Stand-alone' in ansible_windows_domain_role)
+  vars:
+    ansible_user: "{{ non_domain_user }}"
+  block:
+    - name: Set DNS to DC address
+      ansible.windows.win_dns_client:
+        adapter_names: '*'
+        dns_servers:
+          - "{{ dc_ip_address }}"
+
+    - name: Set network to Private
+      ansible.windows.win_powershell:
+        script: |
+          $Ansible.Changed = $false
+
+          $profile = Get-NetConnectionProfile
+
+          if ($profile.NetworkCategory -eq 'Public') {
+            $Ansible.Changed = $true
+            $profile | Set-NetConnectionProfile -NetworkCategory Private
+          }
+    
+    - name: Join domain
+      microsoft.ad.membership:
+        dns_domain_name: "{{ domain_name }}"
+        domain_admin_user: "{{ domain_join_username }}"
+        domain_admin_password: "{{ domain_join_password }}"
+        hostname: "{{ domain_join_hostname }}"
+        state: domain
+      register: _join_domain
+
+    - name: Reboot
+      when:
+        - _join_domain.reboot_required
+      ansible.windows.win_reboot:
+
+    - name: Create domain profile and copy SSH key
+      when:
+        - dc_copy_ssh_key_from_local_user
+      block:
+        - name: Create profile for domain user
+          community.windows.win_user_profile:
+            username: "{{ domain_join_username }}"
+            state: present
+          register: _create_profile
+      
+        - name: Create .ssh directory in domain user profile
+          ansible.windows.win_file:
+            path: "{{ _create_profile.path }}\\.ssh"
+            state: directory
+
+        - name: Copy SSH key from local user to domain user
+          ansible.windows.win_copy:
+            src: "C:\\Users\\{{ non_domain_user }}\\.ssh\\authorized_keys"
+            dest: "{{ _create_profile.path }}\\.ssh\\authorized_keys"
+            remote_src: true
+
+        - name: Ensure SSH key does not inherit ACE
+          ansible.windows.win_acl_inheritance:
+            path: "{{ _create_profile.path }}\\.ssh\\authorized_keys"
+            state: absent
+            reorganize: true
+
+        - name: Ensure Administrators group does not have access to SSH key
+          ansible.windows.win_acl:
+            path: "{{ _create_profile.path }}\\.ssh\\authorized_keys"
+            user: Administrators
+            rights: FullControl
+            type: allow
+            state: absent
+
+        - name: Ensure SYSTEM user has access to SSH key
+          ansible.windows.win_acl:
+            path: "{{ _create_profile.path }}\\.ssh\\authorized_keys"
+            user: SYSTEM
+            rights: FullControl
+            type: allow
+            state: present
+
+        - name: Ensure domain user has access to SSH key
+          ansible.windows.win_acl:
+            path: "{{ _create_profile.path }}\\.ssh\\authorized_keys"
+            user: "{{ domain_join_username }}"
+            rights: FullControl
+            type: allow
+            state: present
+
+- name: Register hostname in DNS
+  when:
+    - dns_register_host
+  delegate_to: "{{ dc_inventory_name }}"
+  community.windows.win_dns_record:
+    name: "{{ inventory_hostname }}"
+    type: A
+    value: "{{ dns_ip_address }}"
+    zone: "{{ domain_name }}"
+    state: present

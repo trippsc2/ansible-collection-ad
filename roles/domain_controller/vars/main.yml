@@ -1,0 +1,18 @@
+---
+_dc_domain_naming_master_value: >-
+  {{ ['DomainNamingMaster'] if dc_is_domain_naming_master else [] }}
+_dc_schema_master_value: >-
+  {{ ['SchemaMaster'] if dc_is_schema_master else [] }}
+_dc_infrastructure_master_value: >-
+  {{ ['InfrastructureMaster'] if dc_is_infrastructure_master else [] }}
+_dc_pdc_emulator_value: >-
+  {{ ['PdcEmulator'] if dc_is_pdc_emulator else [] }}
+_dc_rid_master_value: >-
+  {{ ['RidMaster'] if dc_is_rid_master else [] }}
+
+_dc_fsmo_roles_value: >-
+  {{ _dc_domain_naming_master_value +
+     _dc_schema_master_value +
+     _dc_infrastructure_master_value +
+     _dc_pdc_emulator_value +
+     _dc_rid_master_value }}

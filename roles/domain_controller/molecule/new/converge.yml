@@ -1,0 +1,6 @@
+---
+- name: Converge
+  hosts:
+    - dc
+  roles:
+    - role: trippsc2.ad.domain_controller

@@ -1,0 +1,41 @@
+---
+- name: Gathering Facts
+  when:
+    - ansible_distribution is not defined or
+      ansible_os_family is not defined or
+      ansible_windows_domain_member is not defined
+  ansible.builtin.setup:
+
+- name: Validate OS
+  ansible.builtin.assert:
+    that:
+      - ansible_os_family == 'Windows'
+      - ansible_distribution | regex_search('(Windows Server)')
+    fail_msg: "This role can only be run on Windows Server system.  {{ ansible_distribution }} is not supported."
+    success_msg: "This role is running on {{ ansible_distribution }}."
+
+- name: Verify facts are defined
+  ansible.builtin.assert:
+    that:
+      - ansible_windows_domain_member is defined
+    fail_msg: Information could not be gathered regarding domain membership.
+    success_msg: Domain membership information is available.
+
+- name: Ensure machine is already a domain member
+  when:
+    - not dc_first_domain_controller
+  ansible.builtin.assert:
+    that:
+      - ansible_windows_domain_member
+      - ansible_windows_domain == dc_domain_name
+    fail_msg: "This machine is not a domain member of {{ dc_domain_name }}."
+    success_msg: "This machine is a domain member of {{ dc_domain_name }}."
+
+- name: Ensure that either the safe mode password is defined
+  when:
+    - not dc_vault_managed_safe_mode_password
+  ansible.builtin.assert:
+    that:
+      - dc_safe_mode_password is defined
+    fail_msg: "The 'dc_safe_mode_password' variable must be defined."
+    success_msg: "The 'dc_safe_mode_password' is defined.  Value: {{ dc_safe_mode_password }}"

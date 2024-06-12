@@ -1,0 +1,20 @@
+---
+galaxy_info:
+  author: Jim Tarpley
+  role_name: testing_standalone_win
+  description: This role configures DNS on a standalone (non-domain) Windows machine to use the domain controller for DNS and registers its IP address in DNS.
+  license: MIT
+
+  min_ansible_version: '2.14'
+
+  platforms:
+  - name: Windows
+    versions:
+      - '2019'
+      - '2022'
+
+collections:
+  - ansible.windows
+  - community.windows
+
+dependencies: []

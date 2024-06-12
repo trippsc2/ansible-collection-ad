@@ -1,0 +1,17 @@
+---
+- name: Validate
+  ansible.builtin.import_tasks: validate.yml
+
+- name: Prepare
+  ansible.builtin.import_tasks: prepare.yml
+
+- name: Create/lookup Vault secrets
+  when:
+    - dc_vault_managed_safe_mode_password
+  ansible.builtin.include_tasks: vault.yml
+
+- name: Promote domain controller
+  ansible.builtin.import_tasks: promote.yml
+
+- name: Configure domain controller
+  ansible.builtin.import_tasks: configure.yml

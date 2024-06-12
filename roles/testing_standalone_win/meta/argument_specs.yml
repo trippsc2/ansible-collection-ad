@@ -1,0 +1,38 @@
+---
+argument_specs:
+  main:
+    short_description: Configure Standalone Server DNS to Testing Active Directory Domain
+    description:
+      - This role configures DNS on a standalone (non-domain) Windows machine to use the domain controller for DNS and registers its IP address in DNS.
+    author: Jim Tarpley
+    options:
+      dc_inventory_name:
+        description:
+          - The Ansible inventory name of the test domain controller.
+        type: str
+        required: false
+        default: dc
+      dc_ip_address:
+        description:
+          - The IP address of the test domain controller.
+        type: str
+        required: false
+        default: "{{ hostvars[dc_inventory_name].ansible_host }}"
+      domain_name:
+        description:
+          - The name of the domain to join.
+        type: str
+        required: false
+        default: test.loc
+      dns_host_name:
+        description:
+          - The hostname of the DNS server.
+        type: str
+        required: false
+        default: "{{ inventory_hostname }}"
+      dns_ip_address:
+        description:
+          - The IP address of the DNS server.
+        type: str
+        required: false
+        default: "{{ ansible_host }}"

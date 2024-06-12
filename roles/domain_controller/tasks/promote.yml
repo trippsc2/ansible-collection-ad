@@ -1,0 +1,36 @@
+---
+- name: First domain controller
+  when:
+    - dc_first_domain_controller
+  block:
+    - name: Promote domain controller
+      microsoft.ad.domain:
+        dns_domain_name: "{{ dc_domain_name }}"
+        install_dns: true
+        safe_mode_password: "{{ dc_safe_mode_password }}"
+        database_path: "{{ dc_database_path | default(omit) }}"
+        sysvol_path: "{{ dc_sysvol_path | default(omit) }}"
+      register: _dc_create_domain
+
+    - name: Reboot, if needed
+      when:
+        - _dc_create_domain.reboot_required
+      ansible.windows.win_reboot:
+
+- name: Promote domain controller
+  microsoft.ad.domain_controller:
+    state: domain_controller
+    dns_domain_name: "{{ dc_domain_name }}"
+    domain_admin_user: "{{ dc_domain_admin_user }}"
+    domain_admin_password: "{{ dc_domain_admin_password }}"
+    install_dns: true
+    safe_mode_password: "{{ dc_safe_mode_password }}"
+    database_path: "{{ dc_database_path | default(omit) }}"
+    domain_log_path: "{{ dc_domain_log_path | default(omit) }}"
+    sysvol_path: "{{ dc_sysvol_path | default(omit) }}"
+  register: _dc_promotion
+
+- name: Reboot, if needed
+  when:
+    - _dc_promotion.reboot_required
+  ansible.windows.win_reboot:
