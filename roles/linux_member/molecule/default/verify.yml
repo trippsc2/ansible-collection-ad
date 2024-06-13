@@ -1,0 +1,19 @@
+---
+- name: Verify
+  hosts:
+    - subjects
+  gather_facts: false
+  tasks:
+    - name: Discover domain
+      ansible.builtin.command: |
+        /usr/sbin/realm discover {{ domjoin_domain_name }}
+      changed_when: false
+      register: _realm_discover
+
+    - name: Assert
+      ansible.builtin.assert:
+        that:
+          - _realm_discover.rc == 0
+          - _domjoin_realm_discover.stdout.find('configured: no') == -1
+        fail_msg: "Domain {{ domjoin_domain_name }} not discovered or not joined"
+        success_msg: "Domain {{ domjoin_domain_name }} discovered and joined"

@@ -1,0 +1,21 @@
+---
+- name: Discover domain
+  check_mode: false
+  ansible.builtin.command: "/usr/sbin/realm discover {{ domjoin_domain_name | lower }}"
+  changed_when: false
+  register: _domjoin_realm_discover
+
+- name: Join domain
+  when:
+    - "_domjoin_realm_discover.stdout.find('configured: no') != -1"
+  become: true
+  # no_log: true
+  ansible.builtin.expect:
+    command: "{{ _domjoin_domain_join_command }}"
+    responses:
+      'Password for .*': "{{ domjoin_domain_password }}"
+  notify:
+    - _domjoin_enable_pam_mkhomedir
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers

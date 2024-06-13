@@ -1,0 +1,12 @@
+---
+_domjoin_packages:
+  - adcli
+  - krb5-workstation
+  - oddjob
+  - oddjob-mkhomedir
+  - python3-pexpect
+  - realmd
+  - samba-common-tools
+  - sssd
+
+_domjoin_ssh_service: sshd.service

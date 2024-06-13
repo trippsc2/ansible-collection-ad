@@ -1,0 +1,86 @@
+---
+- name: Configure space override character
+  when:
+    - domjoin_override_space is defined
+  become: true
+  community.general.ini_file:
+    path: /etc/sssd/sssd.conf
+    section: sssd
+    option: override_space
+    value: "{{ domjoin_override_space }}"
+    state: present
+    owner: root
+    group: root
+    mode: '0600'
+  notify:
+    - _domjoin_sssd_restart
+
+- name: Configure default shell
+  become: true
+  community.general.ini_file:
+    path: /etc/sssd/sssd.conf
+    section: "domain/{{ domjoin_domain_name | lower }}"
+    option: default_shell
+    value: "{{ domjoin_default_shell }}"
+    state: present
+    owner: root
+    group: root
+    mode: '0600'
+  notify:
+    - _domjoin_sssd_restart
+
+- name: Configure fully qualified names
+  become: true
+  community.general.ini_file:
+    path: /etc/sssd/sssd.conf
+    section: "domain/{{ domjoin_domain_name | lower }}"
+    option: use_fully_qualified_names
+    value: "{{ _domjoin_use_fully_qualified_names_value }}"
+    state: present
+    owner: root
+    group: root
+    mode: '0600'
+  notify:
+    - _domjoin_sssd_restart
+
+- name: Configure fallback home directory
+  become: true
+  community.general.ini_file:
+    path: /etc/sssd/sssd.conf
+    section: "domain/{{ domjoin_domain_name | lower }}"
+    option: fallback_homedir
+    value: "{{ domjoin_fallback_homedir }}"
+    state: present
+    owner: root
+    group: root
+    mode: '0600'
+  notify:
+    - _domjoin_sssd_restart
+
+- name: Configure GC usage
+  become: true
+  community.general.ini_file:
+    path: /etc/sssd/sssd.conf
+    section: "domain/{{ domjoin_domain_name | lower }}"
+    option: ad_enable_gc
+    value: "{{ _domjoin_enable_gc_value }}"
+    state: present
+    owner: root
+    group: root
+    mode: '0600'
+  notify:
+    - _domjoin_sssd_restart
+
+- name: Configure GPO access control
+  become: true
+  community.general.ini_file:
+    path: /etc/sssd/sssd.conf
+    section: "domain/{{ domjoin_domain_name | lower }}"
+    option: ad_gpo_access_control
+    value: "{{ domjoin_gpo_access_control }}"
+    state: present
+    owner: root
+    group: root
+    mode: '0600'
+  notify:
+    - _domjoin_sssd_restart

@@ -1,0 +1,22 @@
+---
+- name: Enable mkhomedir in PAM
+  listen: _domjoin_enable_pam_mkhomedir
+  when:
+    - ansible_os_family != 'RedHat'
+  become: true
+  ansible.builtin.command: pam-auth-update --enable mkhomedir
+  changed_when: true
+
+- name: Restart SSSD
+  listen: _domjoin_sssd_restart
+  become: true
+  ansible.builtin.systemd_service:
+    name: sssd.service
+    state: restarted
+
+- name: Restart SSHD
+  listen: _domjoin_sshd_restart
+  become: true
+  ansible.builtin.systemd_service:
+    name: "{{ _domjoin_ssh_service }}"
+    state: restarted

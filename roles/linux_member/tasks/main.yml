@@ -1,0 +1,25 @@
+---
+- name: Validate
+  ansible.builtin.import_tasks: validate.yml
+
+- name: Include RHEL variables
+  when:
+    - ansible_os_family == 'RedHat'
+  ansible.builtin.include_vars: RedHat.yml
+
+- name: Include non-RHEL variables
+  when:
+    - ansible_os_family != 'RedHat'
+  ansible.builtin.include_vars: "{{ ansible_distribution }}.yml"
+
+- name: Install packages
+  ansible.builtin.include_tasks: packages.yml
+
+- name: Join domain
+  ansible.builtin.include_tasks: domain-join.yml
+
+- name: Configure SSSD
+  ansible.builtin.include_tasks: sssd.yml
+
+- name: Optional steps
+  ansible.builtin.include_tasks: optional.yml

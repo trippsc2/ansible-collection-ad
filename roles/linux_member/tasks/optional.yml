@@ -1,0 +1,198 @@
+---
+- name: Add sudoers rule for users
+  become: true
+  loop: "{{ domjoin_sudoers_users }}"
+  ansible.builtin.lineinfile:
+    path: /etc/sudoers
+    line: >-
+      {{ item | lower | regex_replace(' ', '\\ ') }}{% if domjoin_use_fully_qualified_names %}@{{ domjoin_domain_name }}{% endif %} ALL=(ALL) ALL
+    insertbefore: '^#includedir /etc/sudoers.d'
+    validate: 'visudo -cf %s'
+
+- name: Add sudoers rule for groups
+  become: true
+  loop: "{{ domjoin_sudoers_groups }}"
+  ansible.builtin.lineinfile:
+    path: /etc/sudoers
+    line: >-
+      %{{ item | lower | regex_replace(' ', '\\ ') }}{% if domjoin_use_fully_qualified_names %}@{{ domjoin_domain_name }}{% endif %} ALL=(ALL) ALL
+    insertbefore: '^#includedir /etc/sudoers.d'
+    validate: 'visudo -cf %s'
+
+- name: Get sshd configuration
+  become: true
+  check_mode: false
+  ansible.builtin.command: sshd -T
+  changed_when: false
+  failed_when: false
+  register: _domjoin_sshd_config
+
+- name: Set temporary variables
+  ansible.builtin.set_fact:
+    _domjoin_space_character: "{{ domjoin_override_space | default('\\ ') }}"
+    _domjoin_existing_allow_users: "{{ _domjoin_sshd_config.stdout | regex_findall('(?<=^allowusers ).*$', multiline=True) }}"
+    _domjoin_existing_allow_groups: "{{ _domjoin_sshd_config.stdout | regex_findall('(?<=^allowgroups ).*$', multiline=True) }}"
+    _domjoin_existing_deny_users: "{{ _domjoin_sshd_config.stdout | regex_findall('(?<=^denyusers ).*$', multiline=True) }}"
+    _domjoin_existing_deny_groups: "{{ _domjoin_sshd_config.stdout | regex_findall('(?<=^denygroups ).*$', multiline=True) }}"
+
+- name: Configure SSH AllowUsers
+  when:
+    - domjoin_add_ssh_allowusers | length > 0
+    - _domjoin_existing_allow_users | length > 0
+  block:
+    - name: Sanitize added allow users
+      ansible.builtin.set_fact:
+        _domjoin_add_allow_users: >-
+          {{ domjoin_add_ssh_allowusers |
+              map('lower') |
+              map('regex_replace', ' ', _domjoin_space_character) |
+              list }}
+
+    - name: Get missing allow users
+      ansible.builtin.set_fact:
+        _domjoin_missing_allow_users: "{{ _domjoin_add_allow_users | difference(_domjoin_existing_allow_users) }}"
+
+    - name: Add allow users
+      become: true
+      loop: "{{ _domjoin_missing_allow_users }}"
+      ansible.builtin.replace:
+        path: /etc/ssh/sshd_config
+        regexp: '(AllowUsers .*)'
+        replace: '\1 {{ item }}'
+        validate: 'sshd -t -f %s'
+      notify:
+        - _domjoin_sshd_restart
+
+- name: Configure SSH AllowGroups
+  when:
+    - domjoin_add_ssh_allowgroups | length > 0
+    - _domjoin_existing_allow_groups | length > 0
+  block:
+    - name: Sanitize added allow groups
+      ansible.builtin.set_fact:
+        _domjoin_add_allow_groups: >-
+          {{ domjoin_add_ssh_allowgroups |
+              map('lower') |
+              map('regex_replace', ' ', _domjoin_space_character) |
+              list }}
+
+    - name: Get missing allow groups
+      ansible.builtin.set_fact:
+        _domjoin_missing_allow_groups: "{{ _domjoin_add_allow_groups | difference(_domjoin_existing_allow_groups) }}"
+
+    - name: Set allow groups
+      become: true
+      loop: "{{ _domjoin_missing_allow_groups }}"
+      ansible.builtin.replace:
+        path: /etc/ssh/sshd_config
+        regexp: '(AllowGroups .*)'
+        replace: '\1 {{ item }}'
+        validate: 'sshd -t -f %s'
+      notify:
+        - _domjoin_sshd_restart
+
+- name: Configure SSH DenyUsers
+  when:
+    - domjoin_add_ssh_denyusers | length > 0
+  block:
+    - name: Add to existing deny users
+      when:
+        - _domjoin_existing_deny_users | length > 0
+      block:
+        - name: Sanitize added deny users
+          ansible.builtin.set_fact:
+            _domjoin_add_deny_users: >-
+              {{ domjoin_add_ssh_denyusers |
+                  map('lower') |
+                  map('regex_replace', ' ', _domjoin_space_character) |
+                  list }}
+
+        - name: Get missing deny users
+          ansible.builtin.set_fact:
+            _domjoin_missing_deny_users: "{{ _domjoin_add_deny_users | difference(_domjoin_existing_deny_users) }}"
+
+        - name: Add deny users
+          become: true
+          loop: "{{ _domjoin_missing_deny_users }}"
+          ansible.builtin.replace:
+            path: /etc/ssh/sshd_config
+            regexp: '(DenyUsers .*)'
+            replace: '\1 {{ item }}'
+            validate: 'sshd -t -f %s'
+          notify:
+            - _domjoin_sshd_restart
+
+    - name: Add new deny users
+      when:
+        - _domjoin_existing_deny_users | length == 0
+      block:
+        - name: Sanitize new deny users
+          ansible.builtin.set_fact:
+            _domjoin_add_deny_users: >-
+              {{ domjoin_add_ssh_denyusers |
+                  map('lower') |
+                  map('regex_replace', ' ', _domjoin_space_character) |
+                  list }}
+
+        - name: Set deny users
+          become: true
+          ansible.builtin.lineinfile:
+            path: /etc/ssh/sshd_config
+            regexp: '^#?DenyUsers'
+            line: "DenyUsers {{ _domjoin_add_deny_users | join(' ') }}"
+            validate: 'sshd -t -f %s'
+          notify:
+            - _domjoin_sshd_restart
+
+- name: Configure SSH DenyGroups
+  when:
+    - domjoin_add_ssh_denygroups | length > 0
+  block:
+    - name: Add to existing deny groups
+      when:
+        - _domjoin_existing_deny_groups | length > 0
+      block:
+        - name: Sanitize new deny groups
+          ansible.builtin.set_fact:
+            _domjoin_add_deny_groups: >-
+              {{ domjoin_add_ssh_denygroups |
+                  map('lower') |
+                  map('regex_replace', ' ', _domjoin_space_character) |
+                  list }}
+
+        - name: Get missing deny groups
+          ansible.builtin.set_fact:
+            _domjoin_missing_deny_groups: "{{ _domjoin_add_deny_groups | difference(_domjoin_existing_deny_groups) }}"
+
+        - name: Add deny groups
+          become: true
+          loop: "{{ _domjoin_missing_deny_groups }}"
+          ansible.builtin.replace:
+            path: /etc/ssh/sshd_config
+            regexp: '(DenyGroups .*)'
+            replace: '\1 {{ item }}'
+            validate: 'sshd -t -f %s'
+          notify:
+            - _domjoin_sshd_restart
+
+    - name: Add new deny groups
+      when:
+        - _domjoin_existing_deny_groups | length == 0
+      block:
+        - name: Sanitize new deny groups
+          ansible.builtin.set_fact:
+            _domjoin_add_deny_groups: >-
+              {{ domjoin_add_ssh_denygroups |
+                  map('lower') |
+                  map('regex_replace', ' ', _domjoin_space_character) |
+                  list }}
+
+        - name: Set deny groups
+          become: true
+          ansible.builtin.lineinfile:
+            path: /etc/ssh/sshd_config
+            regexp: '^#?DenyGroups'
+            line: "DenyGroups {{ _domjoin_add_deny_groups | join(' ') }}"
+            validate: 'sshd -t -f %s'
+          notify:
+            - _domjoin_sshd_restart

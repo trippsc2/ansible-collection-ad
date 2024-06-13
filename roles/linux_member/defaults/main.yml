@@ -1,0 +1,14 @@
+---
+domjoin_default_shell: /bin/bash
+domjoin_use_fully_qualified_names: true
+domjoin_fallback_homedir: /home/%u@%d
+domjoin_enable_gc: true
+domjoin_gpo_access_control: enforcing
+
+domjoin_sudoers_users: []
+domjoin_sudoers_groups: []
+
+domjoin_add_ssh_allowusers: []
+domjoin_add_ssh_allowgroups: []
+domjoin_add_ssh_denyusers: []
+domjoin_add_ssh_denygroups: []

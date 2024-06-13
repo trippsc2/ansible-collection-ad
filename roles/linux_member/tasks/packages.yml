@@ -1,0 +1,6 @@
+---
+- name: Install required packages
+  become: true
+  ansible.builtin.package:
+    name: "{{ _domjoin_packages }}"
+    state: present

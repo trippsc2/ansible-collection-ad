@@ -1,0 +1,119 @@
+---
+argument_specs:
+  main:
+    short_description: Linux Domain Join
+    description:
+      - This role joins a Linux machine to a Windows domain.
+    author: Jim Tarpley
+    options:
+      domjoin_domain_name:
+        type: str
+        required: true
+        description:
+          - The name of the domain to which the Linux machine will be joined.
+      domjoin_computer_ou:
+        type: str
+        required: false
+        description:
+          - The OU in which the computer account will be created.
+          - This is the distinguished name of the OU relative to the base of the domain (e.g. 'OU=Linux' not 'OU=Linux,DC=test,DC=loc').
+      domjoin_domain_user:
+        type: str
+        required: true
+        description:
+          - The user account to use for joining the Linux machine to the domain.
+      domjoin_domain_password:
+        type: str
+        required: true
+        no_log: true
+        description:
+          - The password for the domain user account.
+      domjoin_override_space:
+        type: str
+        required: false
+        description:
+          - The character used to override spaces in user or group names.
+      domjoin_default_shell:
+        type: str
+        required: false
+        default: /bin/bash
+        description:
+          - The default shell for domain users.
+      domjoin_use_fully_qualified_names:
+        type: bool
+        required: false
+        default: true
+        description:
+          - Whether to use fully qualified names for domain users and groups.
+      domjoin_fallback_homedir:
+        type: str
+        required: false
+        default: /home/%u@%d
+        description:
+          - The fallback home directory for domain users.
+      domjoin_enable_gc:
+        type: bool
+        required: false
+        default: false
+        description:
+          - Whether to enable the Global Catalog for the domain.
+          - If disabled, trust relationships with other domains will not be available, but logins will be faster.
+      domjoin_gpo_access_control:
+        type: str
+        required: false
+        default: disabled
+        choices:
+          - disabled
+          - permissive
+          - enforcing
+        description:
+          - The access control mode for Group Policy Objects.
+          - See https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/integrating_rhel_systems_directly_with_windows_active_directory/managing-direct-connections-to-ad_integrating-rhel-systems-directly-with-active-directory#applying-group-policy-object-access-control-in-rhel_managing-direct-connections-to-ad for details.
+      domjoin_sudoers_users:
+        type: list
+        elements: str
+        required: false
+        description:
+          - A list of domain users who should be added to the sudoers file.
+          - Space characters in the user names will be replaced with the character specified in `domjoin_override_space`.
+      domjoin_sudoers_groups:
+        type: list
+        elements: str
+        required: false
+        description:
+          - A list of domain groups who should be added to the sudoers file.
+          - Space characters in the user names will be replaced with the character specified in `domjoin_override_space`.
+      domjoin_add_ssh_allowusers:
+        type: list
+        elements: str
+        required: false
+        default: []
+        description:
+          - A list of domain users who should be added to the AllowUsers directive in the SSH configuration.
+          - Space characters in the user names will be replaced with the character specified in `domjoin_override_space`.
+          - If no users are currently in the AllowUsers directive, the directive will **not** be created.
+      domjoin_add_ssh_allowgroups:
+        type: list
+        elements: str
+        required: false
+        default: []
+        description:
+          - A list of domain groups who should be added to the AllowGroups directive in the SSH configuration.
+          - Space characters in the group names will be replaced with the character specified in `domjoin_override_space`.
+          - If no groups are currently in the AllowGroups directive, the directive will **not** be created.
+      domjoin_add_ssh_denyusers:
+        type: list
+        elements: str
+        required: false
+        default: []
+        description:
+          - A list of domain users who should be added to the DenyUsers directive in the SSH configuration.
+          - Space characters in the user names will be replaced with the character specified in `domjoin_override_space`.
+      domjoin_add_ssh_denygroups:
+        type: list
+        elements: str
+        required: false
+        default: []
+        description:
+          - A list of domain groups who should be added to the DenyGroups directive in the SSH configuration.
+          - Space characters in the group names will be replaced with the character specified in `domjoin_override_space`.

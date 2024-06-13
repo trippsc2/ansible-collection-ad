@@ -1,0 +1,11 @@
+---
+_domjoin_packages:
+  - adcli
+  - oddjob
+  - oddjob-mkhomedir
+  - python3-pexpect
+  - realmd
+  - sssd-ad
+  - sssd-tools
+
+_domjoin_ssh_service: ssh.service
