@@ -7,32 +7,32 @@ argument_specs:
     author: Jim Tarpley
     options:
       dc_inventory_name:
-        description:
-          - The Ansible inventory name of the test domain controller.
         type: str
         required: false
         default: dc
-      dc_ip_address:
         description:
-          - The IP address of the test domain controller.
+          - The Ansible inventory name of the test domain controller.
+      dc_ip_address:
         type: str
         required: false
         default: "{{ hostvars[dc_inventory_name].ansible_host }}"
-      domain_name:
         description:
-          - The name of the domain to join.
+          - The IP address of the test domain controller.
+      domain_name:
         type: str
         required: false
         default: test.loc
-      dns_host_name:
         description:
-          - The hostname of the DNS server.
+          - The name of the domain to join.
+      dns_host_name:
         type: str
         required: false
         default: "{{ inventory_hostname }}"
-      dns_ip_address:
         description:
-          - The IP address of the DNS server.
+          - The hostname of the DNS server.
+      dns_ip_address:
         type: str
         required: false
         default: "{{ ansible_host }}"
+        description:
+          - The IP address of the DNS server.

@@ -7,62 +7,62 @@ argument_specs:
     author: Jim Tarpley
     options:
       non_domain_user:
-        description:
-          - The user from which to run the Ansible tasks before joining the domain.
         type: str
         required: false
         default: vagrant
-      dc_inventory_name:
         description:
-          - The Ansible inventory name of the test domain controller.
+          - The user from which to run the Ansible tasks before joining the domain.
+      dc_inventory_name:
         type: str
         required: false
         default: dc
-      dc_ip_address:
         description:
-          - The IP address of the test domain controller.
+          - The Ansible inventory name of the test domain controller.
+      dc_ip_address:
         type: str
         required: false
         default: "{{ hostvars[dc_inventory_name].ansible_host }}"
-      domain_name:
         description:
-          - The name of the domain to join.
+          - The IP address of the test domain controller.
+      domain_name:
         type: str
         required: false
         default: test.loc
-      domain_join_username:
         description:
-          - The username to use to join the domain.
+          - The name of the domain to join.
+      domain_join_username:
         type: str
         required: false
         default: "vagrant@{{ domain_name }}"
-      domain_join_password:
         description:
-          - The password to use to join the domain.
+          - The username to use to join the domain.
+      domain_join_password:
         type: str
         required: false
         default: vagrant
-      domain_join_hostname:
         description:
-          - The hostname of the joining machine.
+          - The password to use to join the domain.
+      domain_join_hostname:
         type: str
         required: false
         default: "{{ inventory_hostname }}"
+        description:
+          - The hostname of the joining machine.
       dc_copy_ssh_key_from_local_user:
+        type: bool
+        required: false
+        default: true
         description:
           - Whether to create a profile for the domain user and copy the SSH key from the local user.
+      dns_register_host:
         type: bool
         required: false
         default: true
-      dns_register_host:
         description:
           - Whether to register the hostname in DNS.
-        type: bool
-        required: false
-        default: true
       dns_ip_address:
-        description:
-          - The IP address to register in DNS.
         type: str
         required: false
         default: "{{ ansible_host }}"
+        description:
+          - The IP address to register in DNS.

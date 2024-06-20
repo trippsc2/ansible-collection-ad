@@ -25,7 +25,6 @@ argument_specs:
       domjoin_domain_password:
         type: str
         required: true
-        no_log: true
         description:
           - The password for the domain user account.
       domjoin_override_space:
@@ -71,49 +70,49 @@ argument_specs:
           - See https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/integrating_rhel_systems_directly_with_windows_active_directory/managing-direct-connections-to-ad_integrating-rhel-systems-directly-with-active-directory#applying-group-policy-object-access-control-in-rhel_managing-direct-connections-to-ad for details.
       domjoin_sudoers_users:
         type: list
-        elements: str
         required: false
+        elements: str
         description:
           - A list of domain users who should be added to the sudoers file.
           - Space characters in the user names will be replaced with the character specified in `domjoin_override_space`.
       domjoin_sudoers_groups:
         type: list
-        elements: str
         required: false
+        elements: str
         description:
           - A list of domain groups who should be added to the sudoers file.
           - Space characters in the user names will be replaced with the character specified in `domjoin_override_space`.
       domjoin_add_ssh_allowusers:
         type: list
-        elements: str
         required: false
         default: []
+        elements: str
         description:
           - A list of domain users who should be added to the AllowUsers directive in the SSH configuration.
           - Space characters in the user names will be replaced with the character specified in `domjoin_override_space`.
           - If no users are currently in the AllowUsers directive, the directive will **not** be created.
       domjoin_add_ssh_allowgroups:
         type: list
-        elements: str
         required: false
         default: []
+        elements: str
         description:
           - A list of domain groups who should be added to the AllowGroups directive in the SSH configuration.
           - Space characters in the group names will be replaced with the character specified in `domjoin_override_space`.
           - If no groups are currently in the AllowGroups directive, the directive will **not** be created.
       domjoin_add_ssh_denyusers:
         type: list
-        elements: str
         required: false
         default: []
+        elements: str
         description:
           - A list of domain users who should be added to the DenyUsers directive in the SSH configuration.
           - Space characters in the user names will be replaced with the character specified in `domjoin_override_space`.
       domjoin_add_ssh_denygroups:
         type: list
-        elements: str
         required: false
         default: []
+        elements: str
         description:
           - A list of domain groups who should be added to the DenyGroups directive in the SSH configuration.
           - Space characters in the group names will be replaced with the character specified in `domjoin_override_space`.

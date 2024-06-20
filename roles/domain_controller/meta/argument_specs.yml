@@ -33,7 +33,6 @@ argument_specs:
       dc_safe_mode_password:
         type: str
         required: false
-        no_log: true
         description:
           - The safe mode password for the domain controller.
           - If `dc_vault_managed_safe_mode_password` is `true`, this value is ignored.
@@ -56,7 +55,6 @@ argument_specs:
       dc_domain_admin_password:
         type: str
         required: true
-        no_log: true
         description:
           - The password for the user account to use for configuring the domain controller.
       dc_database_path:
@@ -79,17 +77,17 @@ argument_specs:
           - The path to the SYSVOL files for the domain controller.
       dc_dns_forwarders:
         type: list
-        elements: str
         required: false
         default:
           - '8.8.8.8'
           - '4.2.2.2'
+        elements: str
         description:
           - A list of DNS forwarders for the domain controller.
       dc_dns_servers:
         type: list
-        elements: str
         required: true
+        elements: str
         description:
           - A list of DNS servers for the domain controller.
       dc_is_domain_naming_master:
