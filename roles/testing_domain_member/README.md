@@ -1,7 +1,7 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 
 # Ansible Role: trippsc2.ad.testing_domain_member
-Version: 1.1.0
+Version: 1.1.1
 
 This role joins a Windows machine to a test Active Directory Domain during Molecule testing.
 
@@ -22,16 +22,16 @@ This role joins a Windows machine to a test Active Directory Domain during Molec
 ## Role Arguments
 |Option|Description|Type|Required|Choices|Default|
 |---|---|---|---|---|---|
-| non_domain_user | The user from which to run the Ansible tasks before joining the domain. | str | no |  | vagrant |
-| dc_inventory_name | The Ansible inventory name of the test domain controller. | str | no |  | dc |
-| dc_ip_address | The IP address of the test domain controller. | str | no |  | {{ hostvars[dc_inventory_name].ansible_host }} |
-| domain_name | The name of the domain to join. | str | no |  | test.loc |
-| domain_join_username | The username to use to join the domain. | str | no |  | vagrant@{{ domain_name }} |
-| domain_join_password | The password to use to join the domain. | str | no |  | vagrant |
-| domain_join_hostname | The hostname of the joining machine. | str | no |  | {{ inventory_hostname }} |
-| dc_copy_ssh_key_from_local_user | Whether to create a profile for the domain user and copy the SSH key from the local user. | bool | no |  | true |
-| dns_register_host | Whether to register the hostname in DNS. | bool | no |  | true |
-| dns_ip_address | The IP address to register in DNS. | str | no |  | {{ ansible_host }} |
+| non_domain_user | <p>The user from which to run the Ansible tasks before joining the domain.</p> | str | no |  | vagrant |
+| dc_inventory_name | <p>The Ansible inventory name of the test domain controller.</p> | str | no |  | dc |
+| dc_ip_address | <p>The IP address of the test domain controller.</p> | str | no |  | {{ hostvars[dc_inventory_name].ansible_host }} |
+| domain_name | <p>The name of the domain to join.</p> | str | no |  | test.loc |
+| domain_join_username | <p>The username to use to join the domain.</p> | str | no |  | vagrant@{{ domain_name }} |
+| domain_join_password | <p>The password to use to join the domain.</p> | str | no |  | vagrant |
+| domain_join_hostname | <p>The hostname of the joining machine.</p> | str | no |  | {{ inventory_hostname }} |
+| dc_copy_ssh_key_from_local_user | <p>Whether to create a profile for the domain user and copy the SSH key from the local user.</p> | bool | no |  | true |
+| dns_register_host | <p>Whether to register the hostname in DNS.</p> | bool | no |  | true |
+| dns_ip_address | <p>The IP address to register in DNS.</p> | str | no |  | {{ ansible_host }} |
 
 
 ## License

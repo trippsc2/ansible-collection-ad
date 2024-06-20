@@ -1,7 +1,7 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 
 # Ansible Role: trippsc2.ad.linux_member
-Version: 1.1.0
+Version: 1.1.1
 
 This role joins a Linux machine to a Windows domain.
 
@@ -22,22 +22,22 @@ This role joins a Linux machine to a Windows domain.
 ## Role Arguments
 |Option|Description|Type|Required|Choices|Default|
 |---|---|---|---|---|---|
-| domjoin_domain_name | The name of the domain to which the Linux machine will be joined. | str | yes |  |  |
-| domjoin_computer_ou | The OU in which the computer account will be created. This is the distinguished name of the OU relative to the base of the domain (e.g. 'OU=Linux' not 'OU=Linux,DC=test,DC=loc'). | str | no |  |  |
-| domjoin_domain_user | The user account to use for joining the Linux machine to the domain. | str | yes |  |  |
-| domjoin_domain_password | The password for the domain user account. | str | yes |  |  |
-| domjoin_override_space | The character used to override spaces in user or group names. | str | no |  |  |
-| domjoin_default_shell | The default shell for domain users. | str | no |  | /bin/bash |
-| domjoin_use_fully_qualified_names | Whether to use fully qualified names for domain users and groups. | bool | no |  | true |
-| domjoin_fallback_homedir | The fallback home directory for domain users. | str | no |  | /home/%u@%d |
-| domjoin_enable_gc | Whether to enable the Global Catalog for the domain. If disabled, trust relationships with other domains will not be available, but logins will be faster. | bool | no |  | false |
-| domjoin_gpo_access_control | The access control mode for Group Policy Objects. See https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/integrating_rhel_systems_directly_with_windows_active_directory/managing-direct-connections-to-ad_integrating-rhel-systems-directly-with-active-directory#applying-group-policy-object-access-control-in-rhel_managing-direct-connections-to-ad for details. | str | no | <ul><li>disabled</li><li>permissive</li><li>enforcing</li></ul> | disabled |
-| domjoin_sudoers_users | A list of domain users who should be added to the sudoers file. Space characters in the user names will be replaced with the character specified in `domjoin_override_space`. | list of 'str' | no |  |  |
-| domjoin_sudoers_groups | A list of domain groups who should be added to the sudoers file. Space characters in the user names will be replaced with the character specified in `domjoin_override_space`. | list of 'str' | no |  |  |
-| domjoin_add_ssh_allowusers | A list of domain users who should be added to the AllowUsers directive in the SSH configuration. Space characters in the user names will be replaced with the character specified in `domjoin_override_space`. If no users are currently in the AllowUsers directive, the directive will **not** be created. | list of 'str' | no |  |  |
-| domjoin_add_ssh_allowgroups | A list of domain groups who should be added to the AllowGroups directive in the SSH configuration. Space characters in the group names will be replaced with the character specified in `domjoin_override_space`. If no groups are currently in the AllowGroups directive, the directive will **not** be created. | list of 'str' | no |  |  |
-| domjoin_add_ssh_denyusers | A list of domain users who should be added to the DenyUsers directive in the SSH configuration. Space characters in the user names will be replaced with the character specified in `domjoin_override_space`. | list of 'str' | no |  |  |
-| domjoin_add_ssh_denygroups | A list of domain groups who should be added to the DenyGroups directive in the SSH configuration. Space characters in the group names will be replaced with the character specified in `domjoin_override_space`. | list of 'str' | no |  |  |
+| domjoin_domain_name | <p>The name of the domain to which the Linux machine will be joined.</p> | str | yes |  |  |
+| domjoin_computer_ou | <p>The OU in which the computer account will be created.</p><p>This is the distinguished name of the OU relative to the base of the domain (e.g. 'OU=Linux' not 'OU=Linux,DC=test,DC=loc').</p> | str | no |  |  |
+| domjoin_domain_user | <p>The user account to use for joining the Linux machine to the domain.</p> | str | yes |  |  |
+| domjoin_domain_password | <p>The password for the domain user account.</p> | str | yes |  |  |
+| domjoin_override_space | <p>The character used to override spaces in user or group names.</p> | str | no |  |  |
+| domjoin_default_shell | <p>The default shell for domain users.</p> | str | no |  | /bin/bash |
+| domjoin_use_fully_qualified_names | <p>Whether to use fully qualified names for domain users and groups.</p> | bool | no |  | true |
+| domjoin_fallback_homedir | <p>The fallback home directory for domain users.</p> | str | no |  | /home/%u@%d |
+| domjoin_enable_gc | <p>Whether to enable the Global Catalog for the domain.</p><p>If disabled, trust relationships with other domains will not be available, but logins will be faster.</p> | bool | no |  | false |
+| domjoin_gpo_access_control | <p>The access control mode for Group Policy Objects.</p><p>See https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/integrating_rhel_systems_directly_with_windows_active_directory/managing-direct-connections-to-ad_integrating-rhel-systems-directly-with-active-directory#applying-group-policy-object-access-control-in-rhel_managing-direct-connections-to-ad for details.</p> | str | no | <ul><li>disabled</li><li>permissive</li><li>enforcing</li></ul> | disabled |
+| domjoin_sudoers_users | <p>A list of domain users who should be added to the sudoers file.</p><p>Space characters in the user names will be replaced with the character specified in `domjoin_override_space`.</p> | list of 'str' | no |  |  |
+| domjoin_sudoers_groups | <p>A list of domain groups who should be added to the sudoers file.</p><p>Space characters in the user names will be replaced with the character specified in `domjoin_override_space`.</p> | list of 'str' | no |  |  |
+| domjoin_add_ssh_allowusers | <p>A list of domain users who should be added to the AllowUsers directive in the SSH configuration.</p><p>Space characters in the user names will be replaced with the character specified in `domjoin_override_space`.</p><p>If no users are currently in the AllowUsers directive, the directive will **not** be created.</p> | list of 'str' | no |  |  |
+| domjoin_add_ssh_allowgroups | <p>A list of domain groups who should be added to the AllowGroups directive in the SSH configuration.</p><p>Space characters in the group names will be replaced with the character specified in `domjoin_override_space`.</p><p>If no groups are currently in the AllowGroups directive, the directive will **not** be created.</p> | list of 'str' | no |  |  |
+| domjoin_add_ssh_denyusers | <p>A list of domain users who should be added to the DenyUsers directive in the SSH configuration.</p><p>Space characters in the user names will be replaced with the character specified in `domjoin_override_space`.</p> | list of 'str' | no |  |  |
+| domjoin_add_ssh_denygroups | <p>A list of domain groups who should be added to the DenyGroups directive in the SSH configuration.</p><p>Space characters in the group names will be replaced with the character specified in `domjoin_override_space`.</p> | list of 'str' | no |  |  |
 
 
 ## License
