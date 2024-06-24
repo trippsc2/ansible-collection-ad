@@ -1,0 +1,22 @@
+---
+galaxy_info:
+    author: Jim Tarpley
+    namespace: trippsc2
+    role_name: authorize_dhcp_server
+    description: This role authorizes a domain member as a DHCP Server in Active Directory.
+    license: MIT
+
+    min_ansible_version: '2.14'
+
+    platforms:
+      - name: Windows
+        versions:
+          - '2019'
+          - '2022'
+
+collections:
+  - ansible.windows
+  - community.windows
+  - trippsc2.windows
+
+dependencies: []

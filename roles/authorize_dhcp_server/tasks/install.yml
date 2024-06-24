@@ -21,20 +21,16 @@
     name: PSGallery
     installation_policy: trusted
     state: present
+  changed_when: false # This frequently will be a false positive for idempotence.
 
-- name: Ensure 'DnsServerDsc' PowerShell module is installed
+- name: Ensure 'xDhcpServer' PowerShell module is installed
   community.windows.win_psmodule:
-    name: DnsServerDsc
+    name: xDhcpServer
+    accept_license: true
     state: present
 
-- name: Ensure 'ActiveDirectoryDsc' PowerShell module is installed
-  community.windows.win_psmodule:
-    name: ActiveDirectoryDsc
-    state: present
-
-- name: Install DNS management features
+- name: Install DHCP Server management tools feature
   ansible.windows.win_feature:
     name:
-      - RSAT-DNS-Server
-    include_sub_features: true
+      - RSAT-DHCP
     state: present

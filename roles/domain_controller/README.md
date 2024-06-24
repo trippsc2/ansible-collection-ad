@@ -1,7 +1,7 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 
 # Ansible Role: trippsc2.ad.domain_controller
-Version: 1.1.1
+Version: 1.2.0
 
 This role configures the Windows Server machine as an Active Directory Domain Controller.
 
@@ -19,8 +19,8 @@ This role configures the Windows Server machine as an Active Directory Domain Co
 | community.hashi_vault |
 | community.windows |
 | microsoft.ad |
-| trippsc2.general |
 | trippsc2.hashi_vault |
+| trippsc2.windows |
 
 ## Role Arguments
 |Option|Description|Type|Required|Choices|Default|

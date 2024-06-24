@@ -1,0 +1,9 @@
+---
+- name: Validate
+  ansible.builtin.include_tasks: validate.yml
+
+- name: Install Windows roles/features and PowerShell DSC
+  ansible.builtin.import_tasks: install.yml
+
+- name: Authorize DHCP Server
+  ansible.builtin.import_tasks: authorize.yml

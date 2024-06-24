@@ -1,0 +1,7 @@
+---
+ansible_shell_type: powershell
+ansible_become_method: runas
+ansible_become_user: SYSTEM
+
+domain_admin_user: TEST\vagrant
+domain_admin_password: vagrant

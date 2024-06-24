@@ -20,7 +20,7 @@ collections:
   - community.hashi_vault
   - community.windows
   - microsoft.ad
-  - trippsc2.general
   - trippsc2.hashi_vault
+  - trippsc2.windows
 
 dependencies: []

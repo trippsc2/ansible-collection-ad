@@ -1,0 +1,4 @@
+---
+dhcp_authorize_servers:
+  - dns_name: win.test.loc
+    ip_address: "{{ hostvars['win'].ansible_host }}"

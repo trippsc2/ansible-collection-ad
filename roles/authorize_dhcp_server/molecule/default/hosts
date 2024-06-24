@@ -1,0 +1,14 @@
+[subjects]
+win
+
+[windows_domain_members:children]
+subjects
+
+[windows_domain]
+dc
+
+[windows_domain:children]
+windows_domain_members
+
+[windows:children]
+windows_domain

@@ -1,0 +1,16 @@
+---
+- name: Gather OS facts
+  when:
+    - ansible_distribution is not defined
+  ansible.builtin.setup:
+    gather_subset:
+      - '!all'
+      - '!min'
+      - distribution
+
+- name: Validate Windows Server
+  ansible.builtin.assert:
+    that:
+      - ansible_distribution | regex_search('(Microsoft Windows Server)')
+    fail_msg: This role only supports Windows Server.
+    success_msg: This role supports Windows Server.

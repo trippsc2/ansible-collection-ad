@@ -1,0 +1,10 @@
+---
+- name: Authorize DHCP Server
+  loop: "{{ dhcp_authorize_servers }}"
+  run_once: true
+  ansible.windows.win_dsc:
+    resource_name: xDhcpServerAuthorization
+    IsSingleInstance: 'Yes'
+    Ensure: Present
+    DnsName: "{{ item.dns_name }}"
+    IPAddress: "{{ item.ip_address }}"
