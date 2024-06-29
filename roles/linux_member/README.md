@@ -1,7 +1,7 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 
 # Ansible Role: trippsc2.ad.linux_member
-Version: 1.2.1
+Version: 1.2.2
 
 This role joins a Linux machine to a Windows domain.
 
@@ -10,7 +10,7 @@ This role joins a Linux machine to a Windows domain.
 | Platform | Versions |
 | -------- | -------- |
 | Debian | <ul><li>bullseye</li><li>bookworm</li></ul> |
-| EL | <ul><li>8</li></ul> |
+| EL | <ul><li>8</li><li>9</li></ul> |
 | Ubuntu | <ul><li>focal</li><li>jammy</li><li>noble</li></ul> |
 
 ## Dependencies

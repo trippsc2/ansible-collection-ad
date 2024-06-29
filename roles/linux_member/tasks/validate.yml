@@ -2,39 +2,31 @@
 - name: Gather distribution facts
   when:
     - ansible_distribution is not defined or
-      ansible_os_family is not defined or
-      ansible_distribution_major_version is not defined
+      ansible_distribution_major_version is not defined or
+      ansible_os_family is not defined
   ansible.builtin.setup:
     gather_subset:
       - '!all'
       - '!min'
       - distribution
-      - os_family
       - distribution_major_version
+      - distribution_release
+      - os_family
 
-- name: Validate RHEL version
+- name: Validate EL version
   when:
     - ansible_os_family == 'RedHat'
   ansible.builtin.assert:
     that:
-      - ansible_distribution_major_version in _domjoin_supported_rhel_major_versions
-    fail_msg: "Unsupported {{ ansible_distribution }} version: {{ ansible_distribution_major_version }}"
-    success_msg: "{{ ansible_distribution }} {{ ansible_distribution_major_version }} is supported"
+      - ansible_distribution_major_version in _domjoin_supported_el_major_versions
+    fail_msg: "{{ ansible_distribution }} {{ ansible_distribution_major_version }} is not supported. Supported versions are '{{ _domjoin_supported_el_major_versions | join(''', ''') }}'."
+    success_msg: "{{ ansible_distribution }} {{ ansible_distribution_major_version }} is supported."
 
-- name: Validate non-RHEL distribution
+- name: Validate non-EL distribution
   when:
     - ansible_os_family != 'RedHat'
-  block:
-    - name: Validate distribution
-      ansible.builtin.assert:
-        that:
-          - ansible_distribution in _domjoin_supported_non_rhel_distributions.keys()
-        fail_msg: "Unsupported distribution: {{ ansible_distribution }}"
-        success_msg: "{{ ansible_distribution }} is supported. Checking version."
-
-    - name: Validate distribution version
-      ansible.builtin.assert:
-        that:
-          - ansible_distribution_major_version in _domjoin_supported_non_rhel_distributions[ansible_distribution]
-        fail_msg: "Unsupported {{ ansible_distribution }} version: {{ ansible_distribution_major_version }}"
-        success_msg: "{{ ansible_distribution }} {{ ansible_distribution_major_version }} is supported"
+  ansible.builtin.assert:
+    that:
+      - ansible_distribution in _domjoin_supported_non_el_distributions
+    fail_msg: "{{ ansible_distribution }} is not supported. Supported distributions are '{{ _domjoin_supported_non_el_distributions | join(''', ''') }}'."
+    success_msg: "Some {{ ansible_distribution }} releases are supported."

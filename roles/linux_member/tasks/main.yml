@@ -2,12 +2,12 @@
 - name: Validate
   ansible.builtin.import_tasks: validate.yml
 
-- name: Include RHEL variables
+- name: Include EL variables
   when:
     - ansible_os_family == 'RedHat'
   ansible.builtin.include_vars: RedHat.yml
 
-- name: Include non-RHEL variables
+- name: Include non-EL variables
   when:
     - ansible_os_family != 'RedHat'
   ansible.builtin.include_vars: "{{ ansible_distribution }}.yml"

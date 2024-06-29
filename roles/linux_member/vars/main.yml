@@ -7,15 +7,10 @@ _domjoin_use_fully_qualified_names_value: >-
 _domjoin_enable_gc_value: >-
   {% if domjoin_enable_gc %}True{% else %}False{% endif %}
 
-_domjoin_supported_rhel_major_versions:
+_domjoin_supported_el_major_versions:
   - '8'
   - '9'
 
-_domjoin_supported_non_rhel_distributions:
-  Debian:
-    - '11'
-    - '12'
-  Ubuntu:
-    - '20'
-    - '22'
-    - '24'
+_domjoin_supported_non_el_distributions:
+  - Debian
+  - Ubuntu
