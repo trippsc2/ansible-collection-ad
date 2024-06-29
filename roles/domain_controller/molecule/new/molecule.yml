@@ -12,6 +12,8 @@ platforms:
     box: jtarpley/${MOLECULE_BOX:-w2022_cis}
     memory: 2048
     cpus: 2
+    groups:
+      - windows
   - name: vault
     box: jtarpley/rocky8_cis
     memory: 2048
@@ -19,9 +21,24 @@ platforms:
 provisioner:
   name: ansible
   inventory:
-    links:
-      hosts: ./hosts
-      host_vars: ./host_vars/
-      group_vars: ./group_vars/
+    group_vars:
+      all:
+        vault_token: 47542cbc-6bf8-4fba-8eda-02e0a0d29a0a
+        vault_url: "http://{{ hostvars['vault'].ansible_host }}:8200"
+      windows:
+        ansible_shell_type: powershell
+        ansible_become_method: runas
+        ansible_become_user: SYSTEM
+    host_vars:
+      dc:
+        dc_first_domain_controller: true
+        dc_domain_name: test.loc
+        dc_domain_admin_user: vagrant@test.loc
+        dc_domain_admin_password: vagrant
+        dc_dns_forwarders:
+          - '8.8.8.8'
+          - '4.2.2.2'
+        dc_dns_servers:
+          - '127.0.0.1'
 verifier:
   name: ansible

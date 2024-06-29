@@ -12,16 +12,43 @@ platforms:
     box: jtarpley/w2022_cis
     memory: 2048
     cpus: 2
+    groups:
+      - windows
   - name: linux
     box: jtarpley/${MOLECULE_BOX:-rocky8_cis}
     memory: 2048
     cpus: 2
+    groups:
+      - subjects
 provisioner:
   name: ansible
   inventory:
-    links:
-      hosts: ./hosts
-      host_vars: ./host_vars/
-      group_vars: ./group_vars/
+    group_vars:
+      subjects:
+        domjoin_domain_name: test.loc
+        domjoin_computer_ou: OU=Linux
+        domjoin_domain_user: vagrant
+        domjoin_domain_password: vagrant
+        domjoin_override_space: '_'
+        domjoin_default_shell: /bin/bash
+        domjoin_use_fully_qualified_names: false
+        domjoin_fallback_homedir: /home/%u
+        domjoin_enable_gc: false
+        domjoin_gpo_access_control: disabled
+        domjoin_sudoers_users:
+          - Administrator
+        domjoin_sudoers_groups:
+          - Domain Admins
+        domjoin_add_ssh_allowusers:
+          - vagrant
+          - Administrator
+        domjoin_add_ssh_allowgroups:
+          - Domain Admins
+        domjoin_add_ssh_denygroups:
+          - Guests
+      windows:
+        ansible_shell_type: powershell
+        ansible_become_method: runas
+        ansible_become_user: SYSTEM
 verifier:
   name: ansible

@@ -12,16 +12,32 @@ platforms:
     box: jtarpley/${MOLECULE_BOX:-w2022_cis}
     memory: 2048
     cpus: 2
+    groups:
+      - windows
+      - windows_domain
   - name: win
     box: jtarpley/${MOLECULE_BOX:-w2022_cis}
     memory: 2048
     cpus: 2
+    groups:
+      - subjects
+      - windows
+      - windows_domain
+      - windows_domain_members
 provisioner:
   name: ansible
   inventory:
-    links:
-      hosts: ./hosts
-      host_vars: ./host_vars/
-      group_vars: ./group_vars/
+    group_vars:
+      windows:
+        ansible_shell_type: powershell
+        ansible_become_method: runas
+        ansible_become_user: SYSTEM
+        domain_admin_user: TEST\vagrant
+        domain_admin_password: vagrant
+    host_vars:
+      dc:
+        dhcp_authorize_servers:
+          - dns_name: win.test.loc
+            ip_address: "{{ hostvars['win'].ansible_host }}"
 verifier:
   name: ansible

@@ -12,16 +12,25 @@ platforms:
     box: jtarpley/w2022_cis
     memory: 2048
     cpus: 2
+    groups:
+      - windows
   - name: win
     box: jtarpley/${MOLECULE_BOX:-w2022_cis}
     memory: 2048
     cpus: 2
+    groups:
+      - subjects
+      - windows
 provisioner:
   name: ansible
   inventory:
-    links:
-      hosts: ./hosts
-      host_vars: ./host_vars/
-      group_vars: ./group_vars/
+    group_vars:
+      windows:
+        ansible_shell_type: powershell
+        ansible_become_method: runas
+        ansible_become_user: SYSTEM
+    host_vars:
+      win:
+        ansible_user: TEST\vagrant
 verifier:
   name: ansible
