@@ -19,7 +19,7 @@
   ansible.builtin.assert:
     that:
       - ansible_distribution_major_version in _domjoin_supported_el_major_versions
-    fail_msg: "{{ ansible_distribution }} {{ ansible_distribution_major_version }} is not supported. Supported versions are '{{ _domjoin_supported_el_major_versions | join(''', ''') }}'."
+    fail_msg: "{{ ansible_distribution }} {{ ansible_distribution_major_version }} is not supported. Supported versions are: {{ _domjoin_supported_el_major_versions | join(', ') }}"
     success_msg: "{{ ansible_distribution }} {{ ansible_distribution_major_version }} is supported."
 
 - name: Validate non-EL distribution
@@ -28,5 +28,5 @@
   ansible.builtin.assert:
     that:
       - ansible_distribution in _domjoin_supported_non_el_distributions
-    fail_msg: "{{ ansible_distribution }} is not supported. Supported distributions are '{{ _domjoin_supported_non_el_distributions | join(''', ''') }}'."
+    fail_msg: "{{ ansible_distribution }} is not supported. Supported distributions are: {{ _domjoin_supported_non_el_distributions | join(', ') }}"
     success_msg: "Some {{ ansible_distribution }} releases are supported."
