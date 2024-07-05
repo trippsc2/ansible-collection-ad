@@ -1,6 +1,42 @@
 ---
 - name: Verify
   hosts:
-    - subjects
+    - dc
   gather_facts: false
-  tasks: []
+  tasks:
+    - name: Check that DHCP server is authorized
+      ansible.windows.win_powershell:
+        script: |
+          [CmdletBinding()]
+          param(
+              [String]
+              $DnsName,
+              [String]
+              $IPAddress
+          )
+
+          $Ansible.Changed = $false
+          $dhcpServers = ([Array](Get-DhcpServerInDC))
+
+          if ($dhcpServers -eq $null -or $dhcpServers.Count -eq 0) {
+              $Ansible.Result = $false
+              return
+          }
+
+          foreach ($dhcpServer in $dhcpServers) {
+              if ($dhcpServer.DnsName -eq $DnsName -and $dhcpServer.IPAddress -eq $IPAddress) {
+                  $Ansible.Result = $true
+                  return
+              }
+          }
+        parameters:
+          DnsName: "{{ dhcp_authorize_servers[0].dns_name }}"
+          IPAddress: "{{ dhcp_authorize_servers[0].ip_address }}"
+      register: _powershell
+
+    - name: Assert
+      ansible.builtin.assert:
+        that:
+          - _powershell.result
+        fail_msg: DHCP server was not authorized.
+        success_msg: DHCP server was authorized.
