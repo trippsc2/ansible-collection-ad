@@ -25,6 +25,8 @@
         dc_safe_mode_password: "{{ _vault_secret.secret.password }}"
   rescue:
     - name: Generate new password
+      when:
+        - dc_safe_mode_password is not defined
       ansible.builtin.set_fact:
         dc_safe_mode_password: >-
           {{ lookup('ansible.builtin.password', '/dev/null chars=ascii_lowercase,ascii_uppercase,digits,punctuation length=20') }}

@@ -40,5 +40,6 @@ provisioner:
           - '4.2.2.2'
         dc_dns_servers:
           - '127.0.0.1'
+        dc_safe_mode_password: SecurePassword123!
 verifier:
   name: ansible

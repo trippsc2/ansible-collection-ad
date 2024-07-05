@@ -47,6 +47,7 @@ provisioner:
         dc_dns_servers:
           - "{{ hostvars['existingdc'].ansible_host }}"
           - '127.0.0.1'
+        dc_safe_mode_password: SecurePassword123!
         dc_is_domain_naming_master: true
         dc_is_schema_master: true
         dc_is_infrastructure_master: true

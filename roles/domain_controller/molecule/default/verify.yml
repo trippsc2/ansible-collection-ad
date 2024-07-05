@@ -3,10 +3,122 @@
   hosts:
     - dc
   tasks:
+    - name: Get safe mode password from HashiCorp Vault
+      delegate_to: localhost
+      community.hashi_vault.vault_kv2_get:
+        url: "{{ vault_url }}"
+        token: "{{ vault_token }}"
+        engine_mount_point: "{{ dc_vault_safe_mode_mount_point | default('os') }}"
+        path: "{{ dc_vault_safe_mode_path | default(inventory_hostname + '/safe_mode') }}"
+      register: _vault_secret
+
+    - name: Verify safe mode password
+      ansible.builtin.assert:
+        that:
+          - dc_safe_mode_password == _vault_secret.secret.password
+        fail_msg: The safe mode password is not correct.
+        success_msg: The safe mode password is correct.
+
     - name: Verify that the domain controller is promoted
       ansible.builtin.assert:
         that:
           - ansible_windows_domain_role | regex_search('(domain controller)')
           - ansible_windows_domain == 'test.loc'
-        fail_msg: The domain controller is not promoted
-        success_msg: The domain controller is promoted
+        fail_msg: The domain controller is not promoted.
+        success_msg: The domain controller is promoted.
+
+    - name: Check DNS forwarders
+      ansible.windows.win_powershell:
+        script: |
+          $Ansible.Changed = $false
+          $dnsForwarders = Get-DnsServerForwarder -ComputerName DC
+
+          $Ansible.Result = ($dnsForwarders.IPAddress[0] -eq '8.8.8.8' -and $dnsForwarders.IPAddress[1] -eq '4.2.2.2')
+      register: _powershell
+
+    - name: Verify DNS forwarders
+      ansible.builtin.assert:
+        that:
+          - _powershell.result
+        fail_msg: The DNS forwarders are not correct.
+        success_msg: The DNS forwarders are correct.
+
+    - name: Check Domain Naming Master
+      ansible.windows.win_powershell:
+        script: |
+          $Ansible.Changed = $false
+          $dc = Get-ADDomainController -Identity DC
+
+          $Ansible.Result = ('DomainNamingMaster' -in $dc.OperationMasterRoles)
+      register: _powershell
+
+    - name: Verify Domain Naming Master
+      ansible.builtin.assert:
+        that:
+          - _powershell.result
+        fail_msg: The domain controller is not the Domain Naming Master.
+        success_msg: The domain controller is the Domain Naming Master.
+    
+    - name: Check Infrastructure Master
+      ansible.windows.win_powershell:
+        script: |
+          $Ansible.Changed = $false
+          $dc = Get-ADDomainController -Identity DC
+
+          $Ansible.Result = ('InfrastructureMaster' -in $dc.OperationMasterRoles)
+      register: _powershell
+    
+    - name: Verify Infrastructure Master
+      ansible.builtin.assert:
+        that:
+          - _powershell.result
+        fail_msg: The domain controller is not the Infrastructure Master.
+        success_msg: The domain controller is the Infrastructure Master.
+
+    - name: Check PDC Emulator
+      ansible.windows.win_powershell:
+        script: |
+          $Ansible.Changed = $false
+          $dc = Get-ADDomainController -Identity DC
+
+          $Ansible.Result = ('PDCEmulator' -in $dc.OperationMasterRoles)
+      register: _powershell
+
+    - name: Verify PDC Emulator
+      ansible.builtin.assert:
+        that:
+          - _powershell.result
+        fail_msg: The domain controller is not the PDC Emulator.
+        success_msg: The domain controller is the PDC Emulator.
+
+    - name: Check RID Master
+      ansible.windows.win_powershell:
+        script: |
+          $Ansible.Changed = $false
+          $dc = Get-ADDomainController -Identity DC
+
+          $Ansible.Result = ('RIDMaster' -in $dc.OperationMasterRoles)
+      register: _powershell
+
+    - name: Verify RID Master
+      ansible.builtin.assert:
+        that:
+          - _powershell.result
+        fail_msg: The domain controller is not the RID Master.
+        success_msg: The domain controller is the RID Master.
+
+    - name: Check Schema Master
+      ansible.windows.win_powershell:
+        script: |
+          $Ansible.Changed = $false
+          $dc = Get-ADDomainController -Identity DC
+
+          $Ansible.Result = ('SchemaMaster' -in $dc.OperationMasterRoles)
+      register: _powershell
+
+    - name: Verify Schema Master
+      ansible.builtin.assert:
+        that:
+          - _powershell.result
+        fail_msg: The domain controller is not the Schema Master.
+        success_msg: The domain controller is the Schema Master.
