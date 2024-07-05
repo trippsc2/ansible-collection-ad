@@ -14,3 +14,23 @@
       - ansible_distribution | regex_search('(Microsoft Windows Server)')
     fail_msg: This role only supports Windows Server.
     success_msg: This role supports Windows Server.
+
+- name: Validate DHCP DNS Name
+  loop: "{{ dhcp_authorize_servers }}"
+  loop_control:
+    label: "{{ item.dns_name }}"
+  ansible.builtin.assert:
+    that:
+      - item.dns_name is community.general.fqdn_valid
+    fail_msg: "{{ item.dns_name }} is not a valid FQDN."
+    success_msg: "{{ item.dns_name }} is a valid FQDN."
+
+- name: Validate DHCP IP Address
+  loop: "{{ dhcp_authorize_servers }}"
+  loop_control:
+    label: "{{ item.ip_address }}"
+  ansible.builtin.assert:
+    that:
+      - item.ip_address is ansible.utils.ipv4
+    fail_msg: "{{ item.ip_address }} is not a valid IPv4 address."
+    success_msg: "{{ item.ip_address }} is a valid IPv4 address." 

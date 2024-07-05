@@ -22,7 +22,7 @@
 
     - name: Set safe mode password variable
       ansible.builtin.set_fact:
-        dc_safe_mode_password: _vault_secret.secret.password
+        dc_safe_mode_password: "{{ _vault_secret.secret.password }}"
   rescue:
     - name: Generate new password
       ansible.builtin.set_fact:
