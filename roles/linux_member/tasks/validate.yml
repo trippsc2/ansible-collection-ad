@@ -13,6 +13,13 @@
       - distribution_release
       - os_family
 
+- name: Validate OS family
+  ansible.builtin.assert:
+    that:
+      - ansible_os_family in _domjoin_supported_os_families
+    fail_msg: "{{ ansible_os_family }} is not supported. Supported families are: {{ _domjoin_supported_os_families | join(', ') }}"
+    success_msg: "Some {{ ansible_os_family }}-based OS are supported. Checking specific OS."
+
 - name: Validate EL version
   when:
     - ansible_os_family == 'RedHat'
@@ -29,4 +36,14 @@
     that:
       - ansible_distribution in _domjoin_supported_non_el_distributions
     fail_msg: "{{ ansible_distribution }} is not supported. Supported distributions are: {{ _domjoin_supported_non_el_distributions | join(', ') }}"
-    success_msg: "Some {{ ansible_distribution }} releases are supported."
+    success_msg: "{{ ansible_distribution }} is supported."
+
+- name: Include EL variables
+  when:
+    - ansible_os_family == 'RedHat'
+  ansible.builtin.include_vars: RedHat.yml
+
+- name: Include non-EL variables
+  when:
+    - ansible_os_family != 'RedHat'
+  ansible.builtin.include_vars: "{{ ansible_distribution }}.yml"

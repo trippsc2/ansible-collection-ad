@@ -2,18 +2,8 @@
 - name: Validate
   ansible.builtin.import_tasks: validate.yml
 
-- name: Include EL variables
-  when:
-    - ansible_os_family == 'RedHat'
-  ansible.builtin.include_vars: RedHat.yml
-
-- name: Include non-EL variables
-  when:
-    - ansible_os_family != 'RedHat'
-  ansible.builtin.include_vars: "{{ ansible_distribution }}.yml"
-
 - name: Install packages
-  ansible.builtin.include_tasks: packages.yml
+  ansible.builtin.include_tasks: install.yml
 
 - name: Join domain
   ansible.builtin.include_tasks: domain-join.yml

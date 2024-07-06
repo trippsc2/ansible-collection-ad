@@ -10,10 +10,127 @@
       changed_when: false
       register: _realm_discover
 
-    - name: Assert
+    - name: Validate realmd output
       ansible.builtin.assert:
         that:
           - _realm_discover.rc == 0
-          - _domjoin_realm_discover.stdout.find('configured: no') == -1
-        fail_msg: "Domain {{ domjoin_domain_name }} not discovered or not joined"
-        success_msg: "Domain {{ domjoin_domain_name }} discovered and joined"
+          - "_realm_discover.stdout.find('configured: no') == -1"
+        fail_msg: "Domain {{ domjoin_domain_name }} not discovered or not joined."
+        success_msg: "Domain {{ domjoin_domain_name }} discovered and joined."
+
+    - name: Get AD computer object
+      delegate_to: dc
+      microsoft.ad.object_info:
+        identity: CN=LINUX,OU=Linux,DC=test,DC=loc
+        properties: '*'
+      register: _ad_computer_object
+
+    - name: Validate AD computer object
+      ansible.builtin.assert:
+        that:
+          - _ad_computer_object is success
+          - _ad_computer_object.objects | length > 0
+        fail_msg: Computer object not found.
+        success_msg: Computer object found.
+
+    - name: Get sssd config
+      become: true
+      ansible.builtin.command: cat /etc/sssd/sssd.conf
+      changed_when: false
+      register: _sssd_config
+
+    - name: Validate override_space in sssd.conf
+      ansible.builtin.assert:
+        that:
+          - "_sssd_config.stdout.find('override_space = _') != -1"
+        fail_msg: override_space is not configured correctly in sssd.conf.
+        success_msg: override_space is configured correctly in sssd.conf.
+
+    - name: Validate default_shell in sssd.conf
+      ansible.builtin.assert:
+        that:
+          - "_sssd_config.stdout.find('default_shell = /bin/bash') != -1"
+        fail_msg: default_shell is not configured correctly in sssd.conf.
+        success_msg: default_shell is configured correctly in sssd.conf.
+
+    - name: Validate use_fully_qualified_names in sssd.conf
+      ansible.builtin.assert:
+        that:
+          - "_sssd_config.stdout.find('use_fully_qualified_names = False') != -1"
+        fail_msg: use_fully_qualified_names is not configured correctly in sssd.conf.
+        success_msg: use_fully_qualified_names is configured correctly in sssd.conf.
+
+    - name: Validate fallback_homedir in sssd.conf
+      ansible.builtin.assert:
+        that:
+          - "_sssd_config.stdout.find('fallback_homedir = /home/%u') != -1"
+        fail_msg: fallback_homedir is not configured correctly in sssd.conf.
+        success_msg: fallback_homedir is configured correctly in sssd.conf.
+
+    - name: Validate ad_enable_gc in sssd.conf
+      ansible.builtin.assert:
+        that:
+          - "_sssd_config.stdout.find('ad_enable_gc = False') != -1"
+        fail_msg: ad_enable_gc is not configured correctly in sssd.conf.
+        success_msg: ad_enable_gc is configured correctly in sssd.conf.
+
+    - name: Validate ad_gpo_access_control in sssd.conf
+      ansible.builtin.assert:
+        that:
+          - "_sssd_config.stdout.find('ad_gpo_access_control = disabled') != -1"
+        fail_msg: ad_gpo_access_control is not configured correctly in sssd.conf.
+        success_msg: ad_gpo_access_control is configured correctly in sssd.conf.
+
+    - name: Get sudoers config
+      become: true
+      ansible.builtin.command: cat /etc/sudoers
+      changed_when: false
+      register: _sudoers_config
+
+    - name: Validate sudoers users
+      loop: "{{ domjoin_sudoers_users }}"
+      ansible.builtin.assert:
+        that:
+          - "_sudoers_config.stdout.find(item | lower + ' ALL=(ALL) ALL') != -1"
+        fail_msg: "Sudoers user '{{ item }}' not found."
+        success_msg: "Sudoers user '{{ item }}' found."
+
+    - name: Validate sudoers groups
+      loop: "{{ domjoin_sudoers_groups }}"
+      ansible.builtin.assert:
+        that:
+          - "_sudoers_config.stdout.find('%' + item | lower | regex_replace(' ', '\\ ') + ' ALL=(ALL) ALL') != -1"
+        fail_msg: "Sudoers group '{{ item }}' not found."
+        success_msg: "Sudoers group '{{ item }}' found."
+
+    - name: Get sshd config
+      become: true
+      ansible.builtin.command: sshd -T
+      changed_when: false
+      register: _sshd_config
+
+    - name: Validate sshd AllowUsers
+      loop: "{{ domjoin_add_ssh_allowusers }}"
+      ansible.builtin.assert:
+        that:
+          - "_sshd_config.stdout.find('allowusers ' + item | lower | regex_replace(' ', '_')) != -1 or
+            _sshd_config.stdout.find('allowusers ') == -1"
+        fail_msg: "AllowUsers '{{ item }}' not found."
+        success_msg: "AllowUsers '{{ item }}' found."
+
+    - name: Validate sshd AllowGroups
+      loop: "{{ domjoin_add_ssh_allowgroups }}"
+      ansible.builtin.assert:
+        that:
+          - "_sshd_config.stdout.find('allowgroups ' + item | lower | regex_replace(' ', '_')) != -1 or
+            _sshd_config.stdout.find('allowgroups ') == -1"
+        fail_msg: "AllowGroups '{{ item }}' not found."
+        success_msg: "AllowGroups '{{ item }}' found."
+
+    - name: Validate sshd DenyGroups
+      loop: "{{ domjoin_add_ssh_denygroups }}"
+      ansible.builtin.assert:
+        that:
+          - "_sshd_config.stdout.find('denygroups ' + item | lower | regex_replace(' ', '_')) != -1"
+        fail_msg: "DenyGroups '{{ item }}' not found."
+        success_msg: "DenyGroups '{{ item }}' found."

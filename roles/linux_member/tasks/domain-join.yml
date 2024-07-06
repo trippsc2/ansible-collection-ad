@@ -9,7 +9,7 @@
   when:
     - "_domjoin_realm_discover.stdout.find('configured: no') != -1"
   become: true
-  # no_log: true
+  no_log: true
   ansible.builtin.expect:
     command: "{{ _domjoin_domain_join_command }}"
     responses:

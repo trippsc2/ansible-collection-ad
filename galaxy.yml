@@ -1,7 +1,7 @@
 ---
 namespace: trippsc2
 name: ad
-version: 1.2.3
+version: 1.2.4
 readme: README.md
 authors:
   - Jim Tarpley

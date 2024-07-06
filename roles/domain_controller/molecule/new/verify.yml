@@ -8,8 +8,8 @@
       community.hashi_vault.vault_kv2_get:
         url: "{{ vault_url }}"
         token: "{{ vault_token }}"
-        engine_mount_point: "{{ dc_vault_safe_mode_mount_point }}"
-        path: "{{ dc_vault_safe_mode_path }}"
+        engine_mount_point: "{{ dc_vault_safe_mode_mount_point | default('os') }}"
+        path: "{{ dc_vault_safe_mode_path | default(inventory_hostname + '/safe_mode') }}"
       register: _vault_secret
 
     - name: Verify safe mode password
