@@ -10,7 +10,6 @@
       - '!min'
       - distribution
       - distribution_major_version
-      - distribution_release
       - os_family
 
 - name: Validate OS family
