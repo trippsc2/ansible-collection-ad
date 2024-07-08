@@ -10,7 +10,7 @@
       changed_when: false
       register: _realm_discover
 
-    - name: Validate realmd output
+    - name: Verify realmd output
       ansible.builtin.assert:
         that:
           - _realm_discover.rc == 0
@@ -25,7 +25,7 @@
         properties: '*'
       register: _ad_computer_object
 
-    - name: Validate AD computer object
+    - name: Verify AD computer object
       ansible.builtin.assert:
         that:
           - _ad_computer_object is success
@@ -39,42 +39,42 @@
       changed_when: false
       register: _sssd_config
 
-    - name: Validate override_space in sssd.conf
+    - name: Verify override_space in sssd.conf
       ansible.builtin.assert:
         that:
           - "_sssd_config.stdout.find('override_space = _') != -1"
         fail_msg: override_space is not configured correctly in sssd.conf.
         success_msg: override_space is configured correctly in sssd.conf.
 
-    - name: Validate default_shell in sssd.conf
+    - name: Verify default_shell in sssd.conf
       ansible.builtin.assert:
         that:
           - "_sssd_config.stdout.find('default_shell = /bin/bash') != -1"
         fail_msg: default_shell is not configured correctly in sssd.conf.
         success_msg: default_shell is configured correctly in sssd.conf.
 
-    - name: Validate use_fully_qualified_names in sssd.conf
+    - name: Verify use_fully_qualified_names in sssd.conf
       ansible.builtin.assert:
         that:
           - "_sssd_config.stdout.find('use_fully_qualified_names = False') != -1"
         fail_msg: use_fully_qualified_names is not configured correctly in sssd.conf.
         success_msg: use_fully_qualified_names is configured correctly in sssd.conf.
 
-    - name: Validate fallback_homedir in sssd.conf
+    - name: Verify fallback_homedir in sssd.conf
       ansible.builtin.assert:
         that:
           - "_sssd_config.stdout.find('fallback_homedir = /home/%u') != -1"
         fail_msg: fallback_homedir is not configured correctly in sssd.conf.
         success_msg: fallback_homedir is configured correctly in sssd.conf.
 
-    - name: Validate ad_enable_gc in sssd.conf
+    - name: Verify ad_enable_gc in sssd.conf
       ansible.builtin.assert:
         that:
           - "_sssd_config.stdout.find('ad_enable_gc = False') != -1"
         fail_msg: ad_enable_gc is not configured correctly in sssd.conf.
         success_msg: ad_enable_gc is configured correctly in sssd.conf.
 
-    - name: Validate ad_gpo_access_control in sssd.conf
+    - name: Verify ad_gpo_access_control in sssd.conf
       ansible.builtin.assert:
         that:
           - "_sssd_config.stdout.find('ad_gpo_access_control = disabled') != -1"
@@ -87,7 +87,7 @@
       changed_when: false
       register: _sudoers_config
 
-    - name: Validate sudoers users
+    - name: Verify sudoers users
       loop: "{{ domjoin_sudoers_users }}"
       ansible.builtin.assert:
         that:
@@ -95,7 +95,7 @@
         fail_msg: "Sudoers user '{{ item }}' not found."
         success_msg: "Sudoers user '{{ item }}' found."
 
-    - name: Validate sudoers groups
+    - name: Verify sudoers groups
       loop: "{{ domjoin_sudoers_groups }}"
       ansible.builtin.assert:
         that:
@@ -109,7 +109,7 @@
       changed_when: false
       register: _sshd_config
 
-    - name: Validate sshd AllowUsers
+    - name: Verify sshd AllowUsers
       loop: "{{ domjoin_add_ssh_allowusers }}"
       ansible.builtin.assert:
         that:
@@ -118,7 +118,7 @@
         fail_msg: "AllowUsers '{{ item }}' not found."
         success_msg: "AllowUsers '{{ item }}' found."
 
-    - name: Validate sshd AllowGroups
+    - name: Verify sshd AllowGroups
       loop: "{{ domjoin_add_ssh_allowgroups }}"
       ansible.builtin.assert:
         that:
@@ -127,7 +127,7 @@
         fail_msg: "AllowGroups '{{ item }}' not found."
         success_msg: "AllowGroups '{{ item }}' found."
 
-    - name: Validate sshd DenyGroups
+    - name: Verify sshd DenyGroups
       loop: "{{ domjoin_add_ssh_denygroups }}"
       ansible.builtin.assert:
         that:
