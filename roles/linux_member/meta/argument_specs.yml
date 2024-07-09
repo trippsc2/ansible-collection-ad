@@ -3,37 +3,37 @@ argument_specs:
   main:
     short_description: Linux Domain Join
     description:
-      - This role joins a Linux machine to a Windows domain.
+      - This role joins a Linux system to an Active Directory domain.
     author: Jim Tarpley
     options:
       domjoin_domain_name:
         type: str
         required: true
         description:
-          - The name of the domain to which the Linux machine will be joined.
+          - The name of the AD domain to which the Linux system will be joined.
       domjoin_computer_ou:
         type: str
         required: false
         description:
           - The OU in which the computer account will be created.
-          - This is the distinguished name of the OU relative to the base of the domain (e.g. 'OU=Linux' not 'OU=Linux,DC=test,DC=loc').
+          - This is the distinguished name of the OU relative to the base of the domain (e.g. `OU=Linux` not `OU=Linux,DC=test,DC=loc`).
       domjoin_domain_user:
         type: str
         required: true
         description:
-          - The user account to use for joining the Linux machine to the domain.
+          - The user account to be used to authenticate to the AD domain for joining the Linux machine.
       domjoin_domain_password:
         type: str
         required: true
         description:
-          - The password for the domain user account.
+          - The password for the *domjoin_domain_user* user account.
       domjoin_override_space:
         type: str
         required: false
         description:
-          - The character used to override spaces in user or group names.
+          - The character used to override spaces in AD user or group names.
       domjoin_default_shell:
-        type: str
+        type: path
         required: false
         default: /bin/bash
         description:
@@ -49,14 +49,16 @@ argument_specs:
         required: false
         default: /home/%u@%d
         description:
-          - The fallback home directory for domain users.
+          - The template for the home directory of domain users.
+          - 'The following variables can be used: %u - the username,  %d - the fully qualified domain name'
       domjoin_enable_gc:
         type: bool
         required: false
         default: false
         description:
           - Whether to enable the Global Catalog for the domain.
-          - If disabled, trust relationships with other domains will not be available, but logins will be faster.
+          - If disabled, users and groups from trusted domains will not be recognized by the Linux system.
+          - Disabling the Global Catalog can improve performance when there are many trusted domains.
       domjoin_gpo_access_control:
         type: str
         required: false
@@ -67,21 +69,28 @@ argument_specs:
           - enforcing
         description:
           - The access control mode for Group Policy Objects.
-          - See https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/integrating_rhel_systems_directly_with_windows_active_directory/managing-direct-connections-to-ad_integrating-rhel-systems-directly-with-active-directory#applying-group-policy-object-access-control-in-rhel_managing-direct-connections-to-ad for details.
+          - 'See: https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/integrating_rhel_systems_directly_with_windows_active_directory/managing-direct-connections-to-ad_integrating-rhel-systems-directly-with-active-directory#applying-group-policy-object-access-control-in-rhel_managing-direct-connections-to-ad for details.'
       domjoin_sudoers_users:
         type: list
         required: false
         elements: str
         description:
           - A list of domain users who should be added to the sudoers file.
-          - Space characters in the user names will be replaced with the character specified in `domjoin_override_space`.
+          - This should be a list of user names only, not fully qualified names. (e.g. `jdoe` not `TEST\jdoe` or `jdoe@test.loc`)
+          - Spaces in the user names will be escaped automatically in the config file. (e.g. `jdoe test` becomes `jdoe\ test`)
+          - Spaces should not be replaced by the *domjoin_override_space* character. (e.g. If *domjoin_override_space* is `_`, use `jdoe test` not `jdoe_test`)
+          - If *domjoin_use_fully_qualified_names* is `true`, the domain name suffix will be added automatically. (e.g. `jdoe` becomes `jdoe@test.loc`)
       domjoin_sudoers_groups:
         type: list
         required: false
         elements: str
         description:
           - A list of domain groups who should be added to the sudoers file.
-          - Space characters in the user names will be replaced with the character specified in `domjoin_override_space`.
+          - This should be a list of user names only, not fully qualified names. (e.g. `linux` not `TEST\linux` or `linux@test.loc`)
+          - The group names will be prefixed with a `%` symbol automatically in the config file. (e.g. `linux` becomes `%linux`)
+          - Spaces in the user names will be escaped automatically in the config file. (e.g. `Domain Admins` becomes `Domain\ Admins`)
+          - Spaces should not be replaced by the *domjoin_override_space* character. (e.g. If *domjoin_override_space* is `_`, use `Domain Admins` not `Domain_Admins`)
+          - If *domjoin_use_fully_qualified_names* is `true`, the domain name suffix will be added automatically.
       domjoin_add_ssh_allowusers:
         type: list
         required: false
@@ -89,8 +98,10 @@ argument_specs:
         elements: str
         description:
           - A list of domain users who should be added to the AllowUsers directive in the SSH configuration.
-          - Space characters in the user names will be replaced with the character specified in `domjoin_override_space`.
-          - If no users are currently in the AllowUsers directive, the directive will **not** be created.
+          - This should be a list of user names only, not fully qualified names. (e.g. `jdoe` not `TEST\jdoe` or `jdoe@test.loc`)
+          - Space characters in the user names will be replaced with the character specified in *domjoin_override_space* automatically. (e.g. If *domjoin_override_space* is `_`, `jdoe test` becomes `jdoe_test`)
+          - If *domjoin_use_fully_qualified_names* is `true`, the domain name suffix will be added automatically. (e.g. `jdoe` becomes `jdoe@test.loc`)
+          - If no users are currently in the AllowUsers directive, the directive will **not** be created for safety reasons.
       domjoin_add_ssh_allowgroups:
         type: list
         required: false
@@ -98,7 +109,9 @@ argument_specs:
         elements: str
         description:
           - A list of domain groups who should be added to the AllowGroups directive in the SSH configuration.
-          - Space characters in the group names will be replaced with the character specified in `domjoin_override_space`.
+          - This should be a list of user names only, not fully qualified names. (e.g. `Domain Admins` not `TEST\Domain Admins` or `Domain Admins@test.loc`)
+          - Space characters in the user names will be replaced with the character specified in *domjoin_override_space* automatically. (e.g. If *domjoin_override_space* is `_`, `Domain Admins` becomes `Domain_Admins`)
+          - If *domjoin_use_fully_qualified_names* is `true`, the domain name suffix will be added automatically.
           - If no groups are currently in the AllowGroups directive, the directive will **not** be created.
       domjoin_add_ssh_denyusers:
         type: list
@@ -107,7 +120,9 @@ argument_specs:
         elements: str
         description:
           - A list of domain users who should be added to the DenyUsers directive in the SSH configuration.
-          - Space characters in the user names will be replaced with the character specified in `domjoin_override_space`.
+          - This should be a list of user names only, not fully qualified names (e.g. `jdoe` not `TEST\jdoe` or `jdoe@test.loc`).
+          - Space characters in the user names will be replaced with the character specified in *domjoin_override_space* automatically. (e.g. If *domjoin_override_space* is `_`, `jdoe test` becomes `jdoe_test`)
+          - If *domjoin_use_fully_qualified_names* is `true`, the domain name suffix will be added automatically.
       domjoin_add_ssh_denygroups:
         type: list
         required: false
@@ -115,4 +130,6 @@ argument_specs:
         elements: str
         description:
           - A list of domain groups who should be added to the DenyGroups directive in the SSH configuration.
-          - Space characters in the group names will be replaced with the character specified in `domjoin_override_space`.
+          - This should be a list of user names only, not fully qualified names. (e.g. `Domain Admins` not `TEST\Domain Admins` or `Domain Admins@test.loc`)
+          - Space characters in the user names will be replaced with the character specified in *domjoin_override_space* automatically. (e.g. If *domjoin_override_space* is `_`, `Domain Admins` becomes `Domain_Admins`)
+          - If *domjoin_use_fully_qualified_names* is `true`, the domain name suffix will be added automatically.

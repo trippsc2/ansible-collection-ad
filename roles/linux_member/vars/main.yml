@@ -13,8 +13,3 @@ _domjoin_supported_non_el_distributions:
 
 _domjoin_domain_join_command: >-
   /usr/sbin/realm join --user={{ domjoin_domain_user }} {% if domjoin_computer_ou is defined %}--computer-ou='{{ domjoin_computer_ou }}' {% endif %}{{ domjoin_domain_name | lower }}
-
-_domjoin_use_fully_qualified_names_value: >-
-  {% if domjoin_use_fully_qualified_names %}True{% else %}False{% endif %}
-_domjoin_enable_gc_value: >-
-  {% if domjoin_enable_gc %}True{% else %}False{% endif %}

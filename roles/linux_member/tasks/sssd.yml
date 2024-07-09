@@ -35,7 +35,7 @@
     path: /etc/sssd/sssd.conf
     section: "domain/{{ domjoin_domain_name | lower }}"
     option: use_fully_qualified_names
-    value: "{{ _domjoin_use_fully_qualified_names_value }}"
+    value: "{{ domjoin_use_fully_qualified_names | ternary('True', 'False') }}"
     state: present
     owner: root
     group: root
@@ -63,7 +63,7 @@
     path: /etc/sssd/sssd.conf
     section: "domain/{{ domjoin_domain_name | lower }}"
     option: ad_enable_gc
-    value: "{{ _domjoin_enable_gc_value }}"
+    value: "{{ domjoin_enable_gc | ternary('True', 'False') }}"
     state: present
     owner: root
     group: root

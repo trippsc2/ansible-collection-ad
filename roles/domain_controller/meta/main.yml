@@ -3,7 +3,15 @@ galaxy_info:
   author: Jim Tarpley
   namespace: trippsc2
   role_name: domain_controller
-  description: This role configures the Windows Server machine as an Active Directory Domain Controller.
+  description: |
+    This role configures the Windows Server machine as an Active Directory Domain Controller.
+    
+    The following scenarios are supported:
+    - The server is the first domain controller in a new forest.
+    - The server is an additional domain controller in an existing domain.
+    
+    The following scenarios are not supported, but may be added in the future:
+    - The server is the first domain controller in a child or tree domain in an existing forest.
 
   license: MIT
 
