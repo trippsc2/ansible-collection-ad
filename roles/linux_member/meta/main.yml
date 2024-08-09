@@ -9,7 +9,7 @@ galaxy_info:
       Before running this role, the system should use be able to resolve the AD domain name and domain controllers via DNS.
     license: MIT
 
-    min_ansible_version: '2.14'
+    min_ansible_version: '2.15'
 
     platforms:
       - name: Debian

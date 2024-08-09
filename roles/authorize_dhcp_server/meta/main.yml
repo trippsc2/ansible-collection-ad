@@ -6,7 +6,7 @@ galaxy_info:
     description: This role authorizes a domain member as a DHCP Server in Active Directory.
     license: MIT
 
-    min_ansible_version: '2.14'
+    min_ansible_version: '2.15'
 
     platforms:
       - name: Windows
