@@ -1,0 +1,56 @@
+---
+argument_specs:
+  main:
+    short_description: Join Testing Active Directory Domain
+    description:
+      - This role joins a Linux machine to a test Active Directory Domain during Molecule testing.
+    author: Jim Tarpley
+    options:
+      dc_inventory_name:
+        type: str
+        required: false
+        default: dc
+        description:
+          - The Ansible inventory name of the test domain controller.
+      dc_ip_address:
+        type: str
+        required: false
+        default: "{{ hostvars[dc_inventory_name].ansible_host }}"
+        description:
+          - The IP address of the test domain controller.
+      domain_name:
+        type: str
+        required: false
+        default: test.loc
+        description:
+          - The name of the domain to join.
+      domain_join_username:
+        type: str
+        required: false
+        default: vagrant
+        description:
+          - The username to use to join the domain.
+      domain_join_password:
+        type: str
+        required: false
+        default: vagrant
+        description:
+          - The password to use to join the domain.
+      domain_join_hostname:
+        type: str
+        required: false
+        default: "{{ inventory_hostname }}"
+        description:
+          - The hostname of the joining machine.
+      dns_register_host:
+        type: bool
+        required: false
+        default: true
+        description:
+          - Whether to register the hostname in DNS.
+      dns_ip_address:
+        type: str
+        required: false
+        default: "{{ ansible_host }}"
+        description:
+          - The IP address to register in DNS.

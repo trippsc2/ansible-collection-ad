@@ -1,0 +1,32 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: vagrant
+  provider:
+    name: libvirt
+  cachier: machine
+  parallel: true
+platforms:
+  - name: dc
+    box: jtarpley/w2022_cis
+    memory: 2048
+    cpus: 2
+    groups:
+      - windows
+  - name: linux
+    box: jtarpley/${MOLECULE_BOX:-rocky8_cis}
+    memory: 2048
+    cpus: 2
+    groups:
+      - subjects
+provisioner:
+  name: ansible
+  inventory:
+    group_vars:
+      windows:
+        ansible_shell_type: powershell
+        ansible_become_method: runas
+        ansible_become_user: SYSTEM
+verifier:
+  name: ansible

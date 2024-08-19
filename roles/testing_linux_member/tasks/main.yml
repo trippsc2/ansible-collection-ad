@@ -1,0 +1,26 @@
+---
+- name: Set DNS server on all interfaces to DC
+  become: true
+  ansible.builtin.copy:
+    content: |
+      nameserver {{ dc_ip_address }}
+      search {{ domain_name }}
+    dest: /etc/resolv.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Join domain
+  ansible.builtin.import_role:
+    name: trippsc2.ad.linux_member
+
+- name: Register hostname in DNS
+  when:
+    - dns_register_host
+  delegate_to: "{{ dc_inventory_name }}"
+  community.windows.win_dns_record:
+    name: "{{ inventory_hostname }}"
+    type: A
+    value: "{{ dns_ip_address }}"
+    zone: "{{ domain_name }}"
+    state: present

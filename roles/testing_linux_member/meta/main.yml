@@ -2,7 +2,7 @@
 galaxy_info:
   author: Jim Tarpley
   namespace: trippsc2
-  role_name: testing_domain_member
+  role_name: testing_win_member
   description: This role joins a Windows machine to a test Active Directory Domain during Molecule testing.
   license: MIT
 
