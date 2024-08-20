@@ -6,6 +6,12 @@ argument_specs:
       - This role creates an Active Directory domain on the Windows machine for use during Molecule testing.
     author: Jim Tarpley
     options:
+      configure_reverse_lookup_zone:
+        type: bool
+        required: false
+        default: true
+        description:
+          - Whether to configure the reverse lookup zone for the domain.
       dc_initial_dns_servers:
         type: list
         required: false
@@ -45,3 +51,21 @@ argument_specs:
         default: DC=test,DC=loc
         description:
           - The base DN for the domain.
+      dc_reverse_lookup_zone_network_id:
+        type: str
+        required: false
+        default: "{{ ansible_host | ansible.utils.ipsubnet(24) }}"
+        description:
+          - The network ID for the reverse lookup zone to create.
+      dc_reverse_lookup_zone_name:
+        type: str
+        required: false
+        default: "{{ (ansible_host | split('.'))[1] }}.{{ (ansible_host | split('.'))[0] }}.in-addr.arpa"
+        description:
+          - The name of the reverse lookup zone to create.
+      dc_reverse_lookup_zone_data:
+        type: str
+        required: false
+        default: "{{ (ansible_host | split('.'))[3] }}.{{ (ansible_host | split('.'))[2] }}"
+        description:
+          - The data for the reverse lookup zone.

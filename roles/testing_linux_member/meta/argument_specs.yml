@@ -54,3 +54,28 @@ argument_specs:
         default: "{{ ansible_host }}"
         description:
           - The IP address to register in DNS.
+      dns_register_reverse_host:
+        type: bool
+        required: false
+        default: true
+        description:
+          - Whether to register the reverse hostname in DNS.
+      dns_reverse_zone:
+        type: str
+        required: false
+        default: >-
+          {{ (dns_ip_address | split('.'))[2] }}.{{ (dns_ip_address | split('.'))[1] }}.{{ (dns_ip_address | split('.'))[0] }}.in-addr.arpa
+        description:
+          - The reverse DNS zone to register the reverse hostname in.
+      dns_reverse_name:
+        type: str
+        required: false
+        default: "{{ (dns_ip_address | split('.'))[3] }}"
+        description:
+          - The reverse DNS name to register.
+      dns_reverse_value:
+        type: str
+        required: false
+        default: "{{ inventory_hostname }}.{{ domain_name }}"
+        description:
+          - The reverse DNS value to register.

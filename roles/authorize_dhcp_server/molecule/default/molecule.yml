@@ -12,6 +12,8 @@ platforms:
     box: jtarpley/${MOLECULE_BOX:-w2022_cis}
     memory: 2048
     cpus: 2
+    provider_options:
+      default_prefix: authorize_dhcp_server_
     groups:
       - windows
       - windows_domain
@@ -19,6 +21,8 @@ platforms:
     box: jtarpley/${MOLECULE_BOX:-w2022_cis}
     memory: 2048
     cpus: 2
+    provider_options:
+      default_prefix: authorize_dhcp_server_
     groups:
       - subjects
       - windows

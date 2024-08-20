@@ -8,3 +8,9 @@ domain_join_password: vagrant
 
 dns_register_host: true
 dns_ip_address: "{{ ansible_host }}"
+
+dns_register_reverse_host: true
+dns_reverse_zone: >-
+  {{ (dns_ip_address | split('.'))[2] }}.{{ (dns_ip_address | split('.'))[1] }}.{{ (dns_ip_address | split('.'))[0] }}.in-addr.arpa
+dns_reverse_name: "{{ (dns_ip_address | split('.'))[3] }}"
+dns_reverse_value: "{{ inventory_hostname }}.{{ domain_name }}"

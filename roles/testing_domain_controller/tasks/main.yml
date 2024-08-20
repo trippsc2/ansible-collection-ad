@@ -40,6 +40,44 @@
     ipv4_addresses:
       - '127.0.0.1'
 
+- name: Configure reverse lookup zone
+  when:
+    - configure_reverse_lookup_zone
+  block:
+    - name: Ensure reverse lookup zone is configured
+      ansible.windows.win_powershell:
+        script: |
+          [CmdletBinding()]
+          param (
+            [string]$NetworkId,
+            [string]$ZoneName
+          )
+
+          Import-Module DnsServer
+
+          $Ansible.Changed = $false
+
+          $ReverseLookupZone = ([Array](Get-DnsServerZone -Name $ZoneName -ErrorAction SilentlyContinue))
+
+          if ($ReverseLookupZone.Count -eq 0) {
+            $Ansible.Changed = $true
+          }
+
+          if ($Ansible.Changed -and -not $Ansible.CheckMode) {
+            Add-DnsServerPrimaryZone -NetworkID $NetworkId -ZoneFile 'ReverseLookupZone.dns'
+          }
+        parameters:
+          NetworkId: "{{ dc_reverse_lookup_zone_network_id }}"
+          ZoneName: "{{ dc_reverse_lookup_zone_name }}"
+
+    - name: Register PTR records for domain controller
+      community.windows.win_dns_record:
+        name: "{{ dc_reverse_lookup_zone_data }}"
+        zone: "{{ dc_reverse_lookup_zone_name }}"
+        type: PTR
+        value: "{{ ansible_hostname }}.{{ domain_name }}"
+        state: present
+
 - name: Ensure domain admin user is configured
   microsoft.ad.user:
     name: "{{ dc_domain_admin_username }}"

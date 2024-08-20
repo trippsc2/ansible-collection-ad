@@ -2,7 +2,6 @@
 domjoin_domain_name: "{{ domain_name }}"
 domjoin_domain_user: "{{ domain_join_username }}"
 domjoin_domain_password: "{{ domain_join_password }}"
-domjoin_override_space: '_'
 domjoin_use_fully_qualified_names: false
 domjoin_fallback_homedir: /home/%u
 domjoin_enable_gc: false

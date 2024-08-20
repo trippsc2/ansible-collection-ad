@@ -1,4 +1,6 @@
 ---
+configure_reverse_lookup_zone: true
+
 dc_initial_dns_servers:
   - '8.8.8.8'
   - '1.1.1.1'
@@ -8,3 +10,9 @@ dc_safe_mode_password: SecurePassword123!
 
 dc_domain_admin_username: vagrant
 domain_base_dn: DC=test,DC=loc
+
+dc_reverse_lookup_zone_network_id: "{{ ansible_host | ansible.utils.ipsubnet(24) }}"
+dc_reverse_lookup_zone_name: >-
+  {{ (ansible_host | split('.'))[2] }}.{{ (ansible_host | split('.'))[1] }}.{{ (ansible_host | split('.'))[0] }}.in-addr.arpa
+dc_reverse_lookup_zone_data: >-
+  {{ (ansible_host | split('.'))[3] }}

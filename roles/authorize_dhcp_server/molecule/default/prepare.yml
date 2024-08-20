@@ -10,4 +10,4 @@
     - windows_domain_members
   gather_facts: false
   roles:
-    - trippsc2.ad.testing_win_member
+    - role: trippsc2.ad.testing_win_member

@@ -24,3 +24,14 @@
     value: "{{ dns_ip_address }}"
     zone: "{{ domain_name }}"
     state: present
+
+- name: Register reverse hostname in DNS
+  when:
+    - dns_register_reverse_host
+  delegate_to: "{{ dc_inventory_name }}"
+  community.windows.win_dns_record:
+    name: "{{ dns_reverse_name }}"
+    type: PTR
+    value: "{{ dns_reverse_value }}"
+    zone: "{{ dns_reverse_zone }}"
+    state: present
