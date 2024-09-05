@@ -20,19 +20,7 @@
     fail_msg: "This role can only be run on a Windows Server system.  {{ ansible_distribution }} is not supported."
     success_msg: "This role is running on {{ ansible_distribution }}."
 
-- name: Validate Vault URI
-  when:
-    - dc_vault_managed_safe_mode_password
-    - vault_url is defined
-  ansible.builtin.assert:
-    that:
-      - vault_url is uri(schemes=['http', 'https'])
-    fail_msg: "The 'vault_url' variable must be defined as a valid HTTP/HTTPS URL. Value: {{ vault_url }}"
-    success_msg: "The 'vault_url' variable is defined as a valid HTTP/HTTPS URL."
-
 - name: Validate that the safe mode password is defined
-  when:
-    - not dc_vault_managed_safe_mode_password
   ansible.builtin.assert:
     that:
       - dc_safe_mode_password is defined

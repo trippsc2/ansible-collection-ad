@@ -1,7 +1,7 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 
 # Ansible Role: trippsc2.ad.testing_win_member
-Version: 2.2.0
+Version: 2.2.1
 
 This role joins a Windows machine to a test Active Directory Domain during Molecule testing.
 
