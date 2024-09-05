@@ -1,7 +1,7 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 
 # Ansible Role: trippsc2.ad.domain_controller
-Version: 2.1.0
+Version: 2.2.0
 
 This role configures the Windows Server machine as an Active Directory Domain Controller.
 
@@ -36,13 +36,7 @@ The following scenarios are not supported, but may be added in the future:
 ## Role Arguments
 |Option|Description|Type|Required|Choices|Default|
 |---|---|---|---|---|---|
-| vault_url | <p>The URL for accessing HashiCorp Vault.</p><p>Alternatively, this can be configured through ansible.cfg or environment variables.</p> | str | no |  |  |
-| vault_token | <p>The token for accessing HashiCorp Vault.</p><p>Alternatively, this (or any other authentication method) can be configured through ansible.cfg or environment variables.</p> | str | no |  |  |
-| dc_vault_create_mount_point | <p>Whether to create the KV version 2 mount point in HashiCorp Vault for the safe mode password, if it doesn't exist.</p> | bool | no |  | true |
-| dc_vault_managed_safe_mode_password | <p>Whether to manage the safe mode password in HashiCorp Vault.</p> | bool | no |  | true |
-| dc_vault_safe_mode_mount_point | <p>The KV version 2 mount point in HashiCorp Vault for storing the safe mode password.</p> | str | no |  | os |
-| dc_vault_safe_mode_path | <p>The path within the KV version 2 mount point in HashiCorp Vault for storing the safe mode password.</p> | str | no |  | {{ inventory_hostname }}/safe_mode |
-| dc_safe_mode_password | <p>The safe mode password for the domain controller.</p><p>If *dc_vault_managed_safe_mode_password* is `true`, this is required.</p><p>If *dc_vault_managed_safe_mode_password* is `false` and the secret is already stored in HashiCorp Vault, this is ignored.</p><p>If *dc_vault_managed_safe_mode_password* is `false` and the secret is not stored in HashiCorp Vault, this password used and stored in HashiCorp Vault.</p> | str | no |  |  |
+| dc_safe_mode_password | <p>The safe mode password for the domain controller.</p> | str | yes |  |  |
 | dc_first_domain_controller | <p>Whether the server is the first domain controller in the domain.</p> | bool | no |  | false |
 | dc_domain_name | <p>The name of the domain for which the server will serve as domain controller.</p> | str | yes |  |  |
 | dc_domain_admin_user | <p>The user account to use for configuring the domain controller.</p><p>If *dc_first_domain_controller* is `true`, this is ignored.</p><p>Otherwise, this is required and the user account must have the necessary permissions to promote the server to a domain controller.</p> | str | no |  |  |

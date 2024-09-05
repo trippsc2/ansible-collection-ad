@@ -13,9 +13,3 @@
     - role: trippsc2.ad.testing_win_member
       vars:
         dc_inventory_name: existingdc
-
-- name: Prepare Vault server
-  hosts:
-    - vault
-  roles:
-    - role: trippsc2.hashi_vault.testing

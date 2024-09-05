@@ -6,50 +6,11 @@ argument_specs:
       - This role configures the Windows Server machine as an Active Directory Domain Controller.
     author: Jim Tarpley
     options:
-      vault_url:
-        type: str
-        required: false
-        description:
-          - The URL for accessing HashiCorp Vault.
-          - Alternatively, this can be configured through ansible.cfg or environment variables.
-      vault_token:
-        type: str
-        required: false
-        description:
-          - The token for accessing HashiCorp Vault.
-          - Alternatively, this (or any other authentication method) can be configured through ansible.cfg or environment variables.
-      dc_vault_create_mount_point:
-        type: bool
-        required: false
-        default: true
-        description:
-          - Whether to create the KV version 2 mount point in HashiCorp Vault for the safe mode password, if it doesn't exist.
-      dc_vault_managed_safe_mode_password:
-        type: bool
-        required: false
-        default: true
-        description:
-          - Whether to manage the safe mode password in HashiCorp Vault.
-      dc_vault_safe_mode_mount_point:
-        type: str
-        required: false
-        default: os
-        description:
-          - The KV version 2 mount point in HashiCorp Vault for storing the safe mode password.
-      dc_vault_safe_mode_path:
-        type: str
-        required: false
-        default: "{{ inventory_hostname }}/safe_mode"
-        description:
-          - The path within the KV version 2 mount point in HashiCorp Vault for storing the safe mode password.
       dc_safe_mode_password:
         type: str
-        required: false
+        required: true
         description:
           - The safe mode password for the domain controller.
-          - If *dc_vault_managed_safe_mode_password* is `true`, this is required.
-          - If *dc_vault_managed_safe_mode_password* is `false` and the secret is already stored in HashiCorp Vault, this is ignored.
-          - If *dc_vault_managed_safe_mode_password* is `false` and the secret is not stored in HashiCorp Vault, this password used and stored in HashiCorp Vault.
       dc_first_domain_controller:
         type: bool
         required: false
