@@ -25,10 +25,8 @@ galaxy_info:
 
 collections:
   - ansible.windows
-  - community.hashi_vault
   - community.windows
   - microsoft.ad
-  - trippsc2.hashi_vault
   - trippsc2.windows
 
 dependencies:

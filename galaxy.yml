@@ -1,7 +1,7 @@
 ---
 namespace: trippsc2
 name: ad
-version: 2.2.1
+version: 2.2.2
 readme: README.md
 authors:
   - Jim Tarpley
@@ -13,10 +13,8 @@ tags: []
 
 dependencies:
   ansible.windows: ">=1.5.0"
-  community.hashi_vault: ">=4.2.0"
-  community.windows: ">=1.11.0"
+  community.windows: ">=1.0.0"
   microsoft.ad: ">=1.0.0"
-  trippsc2.hashi_vault: ">=1.0.0"
   trippsc2.windows: ">=1.0.0"
 
 repository: https://github.com/trippsc2/ansible-collection-ad.git

@@ -15,8 +15,6 @@ galaxy_info:
       - '2022'
 
 collections:
-  - ansible.windows
   - community.windows
-  - microsoft.ad
 
 dependencies: []
