@@ -31,6 +31,7 @@ argument_specs:
         type: str
         required: false
         default: SecurePassword123!
+        no_log: true
         description:
           - The password to use for the domain in safe mode.
       dc_domain_admin_username:
@@ -42,6 +43,7 @@ argument_specs:
       dc_domain_admin_password:
         type: str
         required: false
+        no_log: true
         description:
           - The password for the domain admin user.
           - If not provided, the domain admin user must already exist.

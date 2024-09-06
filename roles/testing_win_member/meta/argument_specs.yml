@@ -40,6 +40,7 @@ argument_specs:
         type: str
         required: false
         default: vagrant
+        no_log: true
         description:
           - The password to use to join the domain.
       domain_join_hostname:

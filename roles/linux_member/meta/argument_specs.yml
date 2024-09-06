@@ -25,6 +25,7 @@ argument_specs:
       domjoin_domain_password:
         type: str
         required: true
+        no_log: true
         description:
           - The password for the *domjoin_domain_user* user account.
       domjoin_override_space:

@@ -9,6 +9,7 @@ argument_specs:
       dc_safe_mode_password:
         type: str
         required: true
+        no_log: true
         description:
           - The safe mode password for the domain controller.
       dc_first_domain_controller:
@@ -32,6 +33,7 @@ argument_specs:
       dc_domain_admin_password:
         type: str
         required: false
+        no_log: true
         description:
           - The password for the *dc_domain_admin_user* user account.
       dc_database_path:
