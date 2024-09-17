@@ -27,7 +27,7 @@
     domain_server: "{{ rotate_domain_server | default(omit) }}"
     domain_username: "{{ rotate_domain_username | default(omit) }}"
     domain_password: "{{ rotate_domain_password | default(omit) }}"
-    name: "{{ rotate_user }}"
+    identity: "{{ rotate_user }}"
     password: "{{ rotate_new_password }}"
     update_password: always
     state: present
