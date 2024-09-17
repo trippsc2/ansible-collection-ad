@@ -1,0 +1,85 @@
+---
+argument_specs:
+  main:
+    short_description: Rotate Active Directory User Password
+    description:
+      - This role creates an Active Directory domain on the Windows machine for use during Molecule testing.
+    author: Jim Tarpley
+    options:
+      rotate_domain_server:
+        type: str
+        required: false
+        description:
+          - The domain controller to use for the Active Directory user.
+          - This defaults to the domain controller for the domain.
+      rotate_domain_username:
+        type: str
+        required: false
+        description:
+          - The username for accessing the domain controller.
+          - This defaults to the domain administrator.
+      rotate_domain_password:
+        type: str
+        required: false
+        no_log: true
+        description:
+          - The password for accessing the domain controller.
+          - This defaults to the domain administrator password.
+      vault_url:
+        type: str
+        required: false
+        description:
+          - The URL for accessing HashiCorp Vault.
+          - Alternatively, this can be configured through ansible.cfg or environment variables.
+          - If *rotate_use_vault* is `false`, this is ignored.
+      vault_token:
+        type: str
+        required: false
+        description:
+          - The token for accessing HashiCorp Vault.
+          - Alternatively, this (or any other authentication method) can be configured through ansible.cfg or environment variables.
+          - If *rotate_use_vault* is `false`, this is ignored.
+      rotate_use_vault:
+        type: bool
+        required: false
+        default: true
+        description:
+          - Whether to use HashiCorp Vault to store the new password.
+      rotate_create_vault_mount_point:
+        type: bool
+        required: false
+        default: true
+        description:
+          - Whether to create the HashiCorp Vault mount point, if needed.
+          - If *rotate_use_vault* is `false`, this is ignored.
+      rotate_force_password_change:
+        type: bool
+        required: false
+        default: false
+        description:
+          - Whether to change the password always without checking the age.
+          - If set to `true`, this role is not idempotent.
+      rotate_vault_mount_point:
+        type: str
+        required: false
+        description:
+          - The mount point for the KV2 secrets engine in HashiCorp Vault.
+          - If *rotate_use_vault* is `true`, this is required. Otherwise, it is ignored.
+      rotate_vault_secret_path:
+        type: str
+        required: false
+        description:
+          - The path to the secret in HashiCorp Vault.
+          - If *rotate_use_vault* is `true`, this is required. Otherwise, it is ignored.
+      rotate_user:
+        type: str
+        required: true
+        description:
+          - The user whose password will be rotated.
+      rotate_new_password:
+        type: str
+        required: false
+        no_log: true
+        description:
+          - The new password for the user.
+          - If *rotate_use_vault* is `false`, this is required. Otherwise, the new password will be stored in HashiCorp Vault when rotated.

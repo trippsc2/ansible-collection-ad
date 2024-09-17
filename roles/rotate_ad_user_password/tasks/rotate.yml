@@ -1,0 +1,33 @@
+---
+- name: Generate password
+  when:
+    - rotate_new_password is not defined
+  ansible.builtin.set_fact:
+    rotate_new_password: >-
+      {{ lookup(
+          'password',
+          '/dev/null',
+          length=20,
+          chars=['ascii_letters', 'digits']) }}
+
+- name: Store password in HashiCorp Vault
+  when:
+    - rotate_use_vault
+  delegate_to: localhost
+  community.hashi_vault.vault_kv2_write:
+    token: "{{ vault_token | default(omit) }}"
+    url: "{{ vault_url | default(omit) }}"
+    engine_mount_point: "{{ rotate_vault_mount_point }}"
+    path: "{{ rotate_vault_secret_path }}"
+    data:
+      password: "{{ rotate_new_password }}"
+
+- name: Rotate password
+  microsoft.ad.user:
+    domain_server: "{{ rotate_domain_server | default(omit) }}"
+    domain_username: "{{ rotate_domain_username | default(omit) }}"
+    domain_password: "{{ rotate_domain_password | default(omit) }}"
+    name: "{{ rotate_user }}"
+    password: "{{ rotate_new_password }}"
+    update_password: always
+    state: present

@@ -12,6 +12,10 @@ cd ../linux_member
 
 aar_doc . markdown
 
+cd ../rotate_ad_user_password
+
+aar_doc . markdown
+
 cd ../testing_domain_controller
 
 aar_doc . markdown

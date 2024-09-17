@@ -1,0 +1,54 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: vagrant
+  provider:
+    name: libvirt
+  cachier: machine
+  parallel: true
+platforms:
+  - name: vault
+    box: jtarpley/rocky8_cis
+    memory: 2048
+    cpus: 2
+    provider_options:
+      default_prefix: rotate_ad_user_password_
+  - name: dc
+    box: jtarpley/${MOLECULE_BOX:-w2022_cis}
+    memory: 2048
+    cpus: 2
+    provider_options:
+      default_prefix: rotate_ad_user_password_
+    groups:
+      - windows
+      - subjects
+provisioner:
+  name: ansible
+  inventory:
+    group_vars:
+      all:
+        vault_token: 47542cbc-6bf8-4fba-8eda-02e0a0d29a0a
+        vault_url: "http://{{ hostvars['vault'].ansible_host }}:8200"
+        rotate_vault_mount_point: ad
+      windows:
+        ansible_shell_type: powershell
+        ansible_become_method: runas
+        ansible_become_user: SYSTEM
+verifier:
+  name: ansible
+scenario:
+  test_sequence:
+    - dependency
+    - cleanup
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    #- idempotence
+    # Removed idempotence check, because this scenario tests for idempotence implicitly.
+    - side_effect
+    - verify
+    - cleanup
+    - destroy

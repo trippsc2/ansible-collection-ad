@@ -1,0 +1,131 @@
+---
+- name: Gather OS Facts
+  when:
+    - ansible_os_family is not defined
+  ansible.builtin.setup:
+    gather_subset:
+      - '!all'
+      - '!min'
+      - distribution
+
+- name: Validate OS
+  ansible.builtin.assert:
+    that:
+      - ansible_os_family == 'Windows'
+      - ('Windows Server' in ansible_distribution)
+    fail_msg: "This role does not support '{{ ansible_distribution }}'. Only Windows Server is supported."
+    success_msg: "OS '{{ ansible_distribution }}' is supported."
+
+- name: Get user data from Active Directory
+  microsoft.ad.object_info:
+    domain_server: "{{ rotate_domain_server | default(omit) }}"
+    domain_username: "{{ rotate_domain_username | default(omit) }}"
+    domain_password: "{{ rotate_domain_password | default(omit) }}"
+    filter: ObjectClass -eq 'user' -and objectCategory -eq 'Person' -and sAMAccountName -eq '{{ rotate_user }}'
+    properties:
+      - sAMAccountName
+      - pwdLastSet
+  register: _rotate_user_query
+
+- name: Ensure user exists
+  ansible.builtin.assert:
+    that:
+      - _rotate_user_query.objects | length > 0
+    fail_msg: "User '{{ rotate_user }}' does not exist."
+    success_msg: "User '{{ rotate_user }}' exists."
+
+- name: Ensure only one user is found
+  ansible.builtin.assert:
+    that:
+      - _rotate_user_query.objects | length == 1
+    fail_msg: "More than one user '{{ rotate_user }}' found."
+    success_msg: "Only one user '{{ rotate_user }}' found."
+
+- name: Set user data to variable
+  ansible.builtin.set_fact:
+    _rotate_user_data: "{{ _rotate_user_query.objects[0] }}"
+
+- name: Gather current time
+  ansible.builtin.setup:
+    gather_subset:
+      - '!all'
+      - '!min'
+      - date_time
+
+- name: Set initial value for variable to indicate password must be rotated
+  ansible.builtin.set_fact:
+    _rotate_password_must_be_rotated: "{{ rotate_force_password_change }}"
+
+- name: Validate HashiCorp Vault variables
+  when:
+    - rotate_use_vault
+  block:
+    - name: Validate HashiCorp Vault mount point is defined
+      ansible.builtin.assert:
+        that:
+          - rotate_vault_mount_point is defined
+        fail_msg: "The 'rotate_vault_mount_point' variable is not defined."
+        success_msg: "The 'rotate_vault_mount_point' variable is defined."
+
+    - name: Create HashiCorp Vault mount point
+      when:
+        - rotate_create_vault_mount_point
+      delegate_to: localhost
+      trippsc2.hashi_vault.vault_kv2_secret_engine:
+        token: "{{ vault_token | default(omit) }}"
+        url: "{{ vault_url | default(omit) }}"
+        engine_mount_point: "{{ rotate_vault_mount_point }}"
+        state: present
+
+    - name: Validate Vault secret path is defined
+      ansible.builtin.assert:
+        that:
+          - rotate_vault_secret_path is defined
+        fail_msg: "The 'rotate_vault_secret_path' variable is not defined."
+        success_msg: "The 'rotate_vault_secret_path' variable is defined."
+
+    - name: Lookup existing secret in Vault
+      when:
+        - not _rotate_password_must_be_rotated
+      block:
+        - name: Get KV2 secret
+          delegate_to: localhost
+          community.hashi_vault.vault_kv2_get:
+            token: "{{ vault_token | default(omit) }}"
+            url: "{{ vault_url | default(omit) }}"
+            engine_mount_point: "{{ rotate_vault_mount_point }}"
+            path: "{{ rotate_vault_secret_path }}"
+          register: _rotate_vault_secret
+
+        - name: Get difference in time
+          ansible.builtin.set_fact:
+            _rotate_vault_secret_age: >-
+              {{ (ansible_date_time.iso8601[:19] | to_datetime('%Y-%m-%dT%H:%M:%S') -
+                  _rotate_vault_secret.data.metadata.created_time[:19] | to_datetime('%Y-%m-%dT%H:%M:%S')).seconds }}
+
+        - name: Set variable to indicate password must be rotated
+          when:
+            - _rotate_vault_secret_age | int > rotate_period_in_seconds
+          ansible.builtin.set_fact:
+            _rotate_password_must_be_rotated: true
+      rescue:
+        - name: Set variable to indicate password must be rotated
+          ansible.builtin.set_fact:
+            _rotate_password_must_be_rotated: true
+
+- name: Check if password must be rotated without Vault
+  when:
+    - not rotate_use_vault
+    - not _rotate_password_must_be_rotated
+  block:
+    - name: Get difference in time
+      ansible.builtin.set_fact:
+        _rotate_password_age: >-
+          {{ (ansible_date_time.iso8601[:19] | to_datetime('%Y-%m-%dT%H:%M:%S') -
+              (_rotate_user_data.pwdLastSet | microsoft.ad.as_datetime)[:19] | to_datetime('%Y-%m-%dT%H:%M:%S')).seconds }}
+
+    - name: Set variable to indicate password must be rotated
+      when:
+        - _rotate_password_age | int > rotate_period_in_seconds
+      ansible.builtin.set_fact:
+        _rotate_password_must_be_rotated: true

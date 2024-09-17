@@ -1,0 +1,19 @@
+---
+galaxy_info:
+  author: Jim Tarpley
+  namespace: trippsc2
+  role_name: rotate_ad_user_password
+  description: This role rotates the password for an Active Directory user.
+  license: MIT
+
+  min_ansible_version: '2.15'
+
+  platforms:
+  - name: Windows
+    versions:
+      - '2019'
+      - '2022'
+
+collections: []
+
+dependencies: []

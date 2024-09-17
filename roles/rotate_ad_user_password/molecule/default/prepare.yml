@@ -1,0 +1,55 @@
+---
+- name: Prepare Vault
+  hosts:
+    - vault
+  roles:
+    - role: trippsc2.hashi_vault.testing
+  
+  tasks:
+    - name: Create HashiCorp Vault mount point
+      delegate_to: localhost
+      trippsc2.hashi_vault.vault_kv2_secret_engine:
+        token: "{{ vault_token }}"
+        url: "{{ vault_url }}"
+        engine_mount_point: "{{ rotate_vault_mount_point }}"
+        state: present
+
+    - name: Create HashiCorp Vault secret
+      loop:
+        - vaultuser2
+        - vaultuser3
+        - vaultuser4
+      delegate_to: localhost
+      community.hashi_vault.vault_kv2_write:
+        token: "{{ vault_token }}"
+        url: "{{ vault_url }}"
+        engine_mount_point: "{{ rotate_vault_mount_point }}"
+        path: "test.loc/{{ item }}"
+        data:
+          password: DefaultPassword123!
+
+- name: Prepare Active Directory
+  hosts:
+    - dc
+  roles:
+    - role: trippsc2.ad.testing_domain_controller
+  tasks:
+    - name: Create users
+      loop:
+        - vaultuser1
+        - vaultuser2
+        - vaultuser3
+        - vaultuser4
+        - testuser1
+        - testuser2
+        - testuser3
+      microsoft.ad.user:
+        name: "{{ item }}"
+        sam_account_name: "{{ item }}"
+        upn: "{{ item }}@test.loc"
+        password: DefaultPassword123!
+        state: present
+        update_password: on_create
+        groups:
+          add:
+            - Domain Admins
