@@ -23,6 +23,7 @@
       password: "{{ rotate_new_password }}"
 
 - name: Rotate password
+  run_once: true
   microsoft.ad.user:
     domain_server: "{{ rotate_domain_server | default(omit) }}"
     domain_username: "{{ rotate_domain_username | default(omit) }}"
