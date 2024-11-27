@@ -24,7 +24,7 @@
     that:
       - dc_safe_mode_password is defined
     fail_msg: "The 'dc_safe_mode_password' variable must be defined or managed by HashiCorp Vault."
-    success_msg: "The 'dc_safe_mode_password' is defined.  Value: {{ dc_safe_mode_password }}"
+    success_msg: "The 'dc_safe_mode_password' is defined."
 
 - name: Validate domain name
   ansible.builtin.assert:

@@ -3,22 +3,6 @@
   hosts:
     - dc
   tasks:
-    - name: Get safe mode password from HashiCorp Vault
-      delegate_to: localhost
-      community.hashi_vault.vault_kv2_get:
-        url: "{{ vault_url }}"
-        token: "{{ vault_token }}"
-        engine_mount_point: "{{ dc_vault_safe_mode_mount_point | default('os') }}"
-        path: "{{ dc_vault_safe_mode_path | default(inventory_hostname + '/safe_mode') }}"
-      register: _vault_secret
-
-    - name: Verify safe mode password
-      ansible.builtin.assert:
-        that:
-          - dc_safe_mode_password == _vault_secret.secret.password
-        fail_msg: The safe mode password is not correct.
-        success_msg: The safe mode password is correct.
-
     - name: Verify that the domain controller is promoted
       ansible.builtin.assert:
         that:

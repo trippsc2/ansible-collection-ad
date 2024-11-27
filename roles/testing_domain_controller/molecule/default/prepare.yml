@@ -1,15 +1,9 @@
 ---
-- name: Prepare existing DC
-  hosts:
-    - existingdc
-  roles:
-    - role: trippsc2.ad.testing_domain_controller
-
 - name: Prepare new DC
   hosts:
     - dc
   gather_facts: false
-  pre_tasks:
+  tasks:
     - name: Disable IPv6
       ansible.windows.win_regedit:
         path: HKLM:\System\CurrentControlSet\Services\TCPIP6\Parameters
@@ -18,11 +12,6 @@
         type: dword
       notify:
         - _reboot_windows
-
-  roles:
-    - role: trippsc2.ad.testing_win_member
-      vars:
-        dc_inventory_name: existingdc
 
   handlers:
     - name: Reboot
