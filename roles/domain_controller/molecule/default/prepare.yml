@@ -16,6 +16,8 @@
         name: DisabledComponents
         data: 255
         type: dword
+      vars:
+        ansible_user: vagrant
       notify:
         - _reboot_windows
 
@@ -32,3 +34,5 @@
         msg: Reboot initiated to disable IPv6
         post_reboot_delay: 30
         connect_timeout: 30
+      vars:
+        ansible_user: vagrant
