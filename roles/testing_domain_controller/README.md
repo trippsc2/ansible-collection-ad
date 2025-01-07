@@ -1,7 +1,7 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 
 # Ansible Role: trippsc2.ad.testing_domain_controller
-Version: 2.3.4
+Version: 2.3.5
 
 This role creates an Active Directory domain on the Windows machine for use during Molecule testing.
 
@@ -22,8 +22,8 @@ This role creates an Active Directory domain on the Windows machine for use duri
 ## Role Arguments
 |Option|Description|Type|Required|Choices|Default|
 |---|---|---|---|---|---|
-| configure_reverse_lookup_zone | <p>Whether to configure the reverse lookup zone for the domain.</p> | bool | no |  | true |
-| dc_initial_dns_servers | <p>List of initial DNS servers to use when creating the domain.</p> | list of 'str' | no |  | ["8.8.8.8", "1.1.1.1"] |
+| configure_reverse_lookup_zone | <p>Whether to configure the reverse lookup zone for the domain.</p> | bool | no |  | True |
+| dc_initial_dns_servers | <p>List of initial DNS servers to use when creating the domain.</p> | list of 'str' | no |  | ['8.8.8.8', '1.1.1.1'] |
 | domain_name | <p>The name of the domain to create.</p> | str | no |  | test.loc |
 | dc_safe_mode_password | <p>The password to use for the domain in safe mode.</p> | str | no |  | SecurePassword123! |
 | dc_domain_admin_username | <p>The username to which to give all administrative rights for the domain.</p> | str | no |  | vagrant |

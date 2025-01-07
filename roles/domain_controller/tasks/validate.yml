@@ -19,13 +19,6 @@
     fail_msg: "This role can only be run on a Windows Server system.  {{ ansible_distribution }} is not supported."
     success_msg: "This role is running on {{ ansible_distribution }}."
 
-- name: Validate that the safe mode password is defined
-  ansible.builtin.assert:
-    that:
-      - dc_safe_mode_password is defined
-    fail_msg: "The 'dc_safe_mode_password' variable must be defined or managed by HashiCorp Vault."
-    success_msg: "The 'dc_safe_mode_password' is defined."
-
 - name: Validate domain name
   ansible.builtin.assert:
     that:
