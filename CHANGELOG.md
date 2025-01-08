@@ -217,9 +217,9 @@ All notable changes to this project will be documented in this file.
 
 ## [1.1.0] - 2024-06-13
 
-### Role - linux_member
+### Collection
 
-- Role added.
+- *linux_member* role added.
 
 ## [1.0.0] - 2024-06-12
 
