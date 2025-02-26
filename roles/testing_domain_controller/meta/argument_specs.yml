@@ -4,7 +4,7 @@ argument_specs:
     short_description: Create Testing Active Directory Domain
     description:
       - This role creates an Active Directory domain on the Windows machine for use during Molecule testing.
-    author: Jim Tarpley
+    author: Jim Tarpley (@trippsc2)
     options:
       configure_reverse_lookup_zone:
         type: bool

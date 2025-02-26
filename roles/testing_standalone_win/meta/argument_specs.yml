@@ -4,7 +4,7 @@ argument_specs:
     short_description: Configure Standalone Server DNS to Testing Active Directory Domain
     description:
       - This role configures DNS on a standalone (non-domain) Windows machine to use the domain controller for DNS and registers its IP address in DNS.
-    author: Jim Tarpley
+    author: Jim Tarpley (@trippsc2)
     options:
       dc_inventory_name:
         type: str

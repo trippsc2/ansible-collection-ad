@@ -4,7 +4,7 @@ argument_specs:
     short_description: Join Testing Active Directory Domain
     description:
       - This role joins a Linux machine to a test Active Directory Domain during Molecule testing.
-    author: Jim Tarpley
+    author: Jim Tarpley (@trippsc2)
     options:
       dc_inventory_name:
         type: str

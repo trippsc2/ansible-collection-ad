@@ -1,6 +1,6 @@
 ---
 galaxy_info:
-  author: Jim Tarpley
+  author: Jim Tarpley (@trippsc2)
   namespace: trippsc2
   role_name: testing_domain_controller
   description: This role creates an Active Directory domain on the Windows machine for use during Molecule testing.

@@ -4,7 +4,7 @@ argument_specs:
     short_description: Rotate Active Directory User Password
     description:
       - This role creates an Active Directory domain on the Windows machine for use during Molecule testing.
-    author: Jim Tarpley
+    author: Jim Tarpley (@trippsc2)
     options:
       rotate_domain_server:
         type: str

@@ -1,6 +1,6 @@
 ---
 galaxy_info:
-  author: Jim Tarpley
+  author: Jim Tarpley (@trippsc2)
   namespace: trippsc2
   role_name: rotate_ad_user_password
   description: This role rotates the password for an Active Directory user.

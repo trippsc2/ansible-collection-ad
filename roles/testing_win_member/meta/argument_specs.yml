@@ -4,7 +4,7 @@ argument_specs:
     short_description: Join Testing Active Directory Domain
     description:
       - This role joins a Windows machine to a test Active Directory Domain during Molecule testing.
-    author: Jim Tarpley
+    author: Jim Tarpley (@trippsc2)
     options:
       non_domain_user:
         type: str
