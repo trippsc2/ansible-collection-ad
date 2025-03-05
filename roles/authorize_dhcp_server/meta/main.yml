@@ -1,18 +1,18 @@
 ---
 galaxy_info:
-    author: Jim Tarpley (@trippsc2)
-    namespace: trippsc2
-    role_name: authorize_dhcp_server
-    description: This role authorizes a domain member as a DHCP Server in Active Directory.
-    license: MIT
+  author: Jim Tarpley (@trippsc2)
+  namespace: trippsc2
+  role_name: authorize_dhcp_server
+  description: This role authorizes a domain member as a DHCP Server in Active Directory.
+  license: MIT
 
-    min_ansible_version: '2.15'
+  min_ansible_version: '2.16'
 
-    platforms:
-      - name: Windows
-        versions:
-          - '2019'
-          - '2022'
+  platforms:
+    - name: Windows
+      versions:
+        - '2019'
+        - '2022'
 
 collections:
   - ansible.windows

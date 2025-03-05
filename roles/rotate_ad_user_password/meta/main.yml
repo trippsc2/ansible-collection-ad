@@ -6,7 +6,7 @@ galaxy_info:
   description: This role rotates the password for an Active Directory user.
   license: MIT
 
-  min_ansible_version: '2.15'
+  min_ansible_version: '2.16'
 
   platforms:
   - name: Windows
