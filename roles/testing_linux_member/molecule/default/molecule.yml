@@ -13,7 +13,7 @@ platforms:
     memory: 2048
     cpus: 2
     provider_options:
-      default_prefix: testing_linux_member_
+      default_prefix: ad_testing_linux_member_
     groups:
       - windows
   - name: linux
@@ -21,7 +21,7 @@ platforms:
     memory: 2048
     cpus: 2
     provider_options:
-      default_prefix: testing_linux_member_
+      default_prefix: ad_testing_linux_member_
     groups:
       - subjects
 provisioner:

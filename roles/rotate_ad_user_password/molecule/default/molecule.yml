@@ -13,13 +13,13 @@ platforms:
     memory: 2048
     cpus: 2
     provider_options:
-      default_prefix: rotate_ad_user_password_
+      default_prefix: ad_rotate_user_password_
   - name: dc
     box: jtarpley/${MOLECULE_BOX:-w2022_cis}
     memory: 2048
     cpus: 2
     provider_options:
-      default_prefix: rotate_ad_user_password_
+      default_prefix: ad_rotate_user_password_
     groups:
       - windows
       - subjects

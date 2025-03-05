@@ -13,7 +13,7 @@ platforms:
     memory: 2048
     cpus: 2
     provider_options:
-      default_prefix: domain_controller_
+      default_prefix: ad_domain_controller_
     groups:
       - windows
   - name: dc
@@ -21,7 +21,7 @@ platforms:
     memory: 2048
     cpus: 2
     provider_options:
-      default_prefix: domain_controller_
+      default_prefix: ad_domain_controller_
     groups:
       - windows
 provisioner:

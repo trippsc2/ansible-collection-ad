@@ -13,7 +13,7 @@ platforms:
     memory: 2048
     cpus: 2
     provider_options:
-      default_prefix: authorize_dhcp_server_
+      default_prefix: ad_authorize_dhcp_server_
     groups:
       - windows
       - windows_domain
@@ -22,7 +22,7 @@ platforms:
     memory: 2048
     cpus: 2
     provider_options:
-      default_prefix: authorize_dhcp_server_
+      default_prefix: ad_authorize_dhcp_server_
     groups:
       - subjects
       - windows

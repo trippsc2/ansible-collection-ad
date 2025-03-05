@@ -13,7 +13,7 @@ platforms:
     memory: 2048
     cpus: 2
     provider_options:
-      default_prefix: testing_standalone_win_
+      default_prefix: ad_testing_standalone_win_
     groups:
       - windows
   - name: win
@@ -21,7 +21,7 @@ platforms:
     memory: 2048
     cpus: 2
     provider_options:
-      default_prefix: testing_standalone_win_
+      default_prefix: ad_testing_standalone_win_
     groups:
       - subjects
       - windows

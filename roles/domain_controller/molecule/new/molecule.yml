@@ -13,7 +13,7 @@ platforms:
     memory: 2048
     cpus: 2
     provider_options:
-      default_prefix: domain_controller_new_
+      default_prefix: ad_domain_controller_new_
     groups:
       - windows
 provisioner:
