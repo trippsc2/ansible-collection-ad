@@ -9,7 +9,7 @@ driver:
   parallel: true
 platforms:
   - name: vault
-    box: jtarpley/rocky8_cis
+    box: jtarpley/rocky9_cis
     memory: 2048
     cpus: 2
     provider_options:
