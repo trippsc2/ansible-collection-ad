@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.7] - 2025-05-15
+
+### Role - linux_member
+
+- Fixed error that prevents Windows machines from receiving the correct validation error.
+
 ## [2.3.6] - 2025-05-15
 
 ### Role - linux_member
