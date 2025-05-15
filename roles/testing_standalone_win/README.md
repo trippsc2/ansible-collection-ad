@@ -1,7 +1,7 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 
 # Ansible Role: trippsc2.ad.testing_standalone_win
-Version: 2.3.5
+Version: 2.3.6
 
 This role configures DNS on a standalone (non-domain) Windows machine to use the domain controller for DNS and registers its IP address in DNS.
 
@@ -9,7 +9,7 @@ This role configures DNS on a standalone (non-domain) Windows machine to use the
 
 | Platform | Versions |
 | -------- | -------- |
-| Windows | <ul><li>2019</li><li>2022</li></ul> |
+| Windows | <ul><li>all</li></ul> |
 
 ## Dependencies
 
@@ -32,5 +32,5 @@ This role configures DNS on a standalone (non-domain) Windows machine to use the
 MIT
 
 ## Author and Project Information
-Jim Tarpley
+Jim Tarpley (@trippsc2)
 <!-- END_ANSIBLE_DOCS -->

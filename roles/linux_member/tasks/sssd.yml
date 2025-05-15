@@ -84,3 +84,6 @@
     mode: '0600'
   notify:
     - _domjoin_sssd_restart
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers

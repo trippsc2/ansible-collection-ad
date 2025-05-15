@@ -14,17 +14,16 @@ galaxy_info:
   platforms:
     - name: Debian
       versions:
-        - bullseye
         - bookworm
     - name: EL
       versions:
-        - '8'
         - '9'
+        - '8'
     - name: Ubuntu
       versions:
-        - focal
-        - jammy
         - noble
+        - jammy
+        - focal
 
 collections:
   - community.general

@@ -1,7 +1,7 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 
 # Ansible Role: trippsc2.ad.linux_member
-Version: 2.3.5
+Version: 2.3.6
 
 This role joins a Linux system to an Active Directory domain.
 
@@ -12,9 +12,9 @@ Before running this role, the system should use be able to resolve the AD domain
 
 | Platform | Versions |
 | -------- | -------- |
-| Debian | <ul><li>bullseye</li><li>bookworm</li></ul> |
-| EL | <ul><li>8</li><li>9</li></ul> |
-| Ubuntu | <ul><li>focal</li><li>jammy</li><li>noble</li></ul> |
+| Debian | <ul><li>bookworm</li></ul> |
+| EL | <ul><li>9</li><li>8</li></ul> |
+| Ubuntu | <ul><li>noble</li><li>jammy</li><li>focal</li></ul> |
 
 ## Dependencies
 
@@ -47,5 +47,5 @@ Before running this role, the system should use be able to resolve the AD domain
 MIT
 
 ## Author and Project Information
-Jim Tarpley
+Jim Tarpley (@trippsc2)
 <!-- END_ANSIBLE_DOCS -->

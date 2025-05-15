@@ -1,7 +1,7 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 
 # Ansible Role: trippsc2.ad.rotate_ad_user_password
-Version: 2.3.5
+Version: 2.3.6
 
 This role rotates the password for an Active Directory user.
 
@@ -9,11 +9,17 @@ This role rotates the password for an Active Directory user.
 
 | Platform | Versions |
 | -------- | -------- |
-| Windows | <ul><li>2019</li><li>2022</li></ul> |
+| Windows | <ul><li>2025</li><li>2022</li><li>2019</li></ul> |
 
 ## Dependencies
 
-None.
+| Collection |
+| ---------- |
+| ansible.windows |
+| community.hashi_vault |
+| community.windows |
+| microsoft.ad |
+| trippsc2.hashi_vault |
 
 ## Role Arguments
 |Option|Description|Type|Required|Choices|Default|
@@ -36,5 +42,5 @@ None.
 MIT
 
 ## Author and Project Information
-Jim Tarpley
+Jim Tarpley (@trippsc2)
 <!-- END_ANSIBLE_DOCS -->

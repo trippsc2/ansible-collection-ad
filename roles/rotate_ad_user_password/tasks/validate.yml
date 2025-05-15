@@ -7,14 +7,15 @@
       - '!all'
       - '!min'
       - distribution
+      - os_family
 
-- name: Validate OS
+- name: Validate Windows Server
   ansible.builtin.assert:
     that:
       - ansible_os_family == 'Windows'
       - ('Windows Server' in ansible_distribution)
-    fail_msg: "This role does not support '{{ ansible_distribution }}'. Only Windows Server is supported."
-    success_msg: "OS '{{ ansible_distribution }}' is supported."
+    fail_msg: "This role can only be run on a Windows Server system.  {{ ansible_distribution }} is not supported."
+    success_msg: "This role is running on {{ ansible_distribution }}."
 
 - name: Get user data from Active Directory
   microsoft.ad.object_info:

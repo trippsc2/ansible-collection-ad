@@ -196,3 +196,6 @@
             validate: 'sshd -t -f %s'
           notify:
             - _domjoin_sshd_restart
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers

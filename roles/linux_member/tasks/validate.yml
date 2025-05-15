@@ -3,6 +3,7 @@
   when:
     - ansible_distribution is not defined or
       ansible_distribution_major_version is not defined or
+      ansible_distribution_version is not defined or
       ansible_os_family is not defined
   ansible.builtin.setup:
     gather_subset:
@@ -10,39 +11,40 @@
       - '!min'
       - distribution
       - distribution_major_version
+      - distribution_version
       - os_family
 
-- name: Validate OS family
+- name: Include OS specific variables
+  ansible.builtin.include_vars: "{{ _file }}"
+  vars:
+    _file: "{{ lookup('first_found', _params) }}"
+    _params:
+      files:
+        - "{{ ansible_distribution }}-{{ ansible_distribution_release }}.yml"
+        - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
+        - "{{ ansible_distribution }}.yml"
+        - "{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
+        - "{{ ansible_os_family }}.yml"
+        - "fallback.yml"
+      paths:
+        - "{{ role_path }}/vars"
+
+- name: Validate OS is supported
   ansible.builtin.assert:
     that:
-      - ansible_os_family in _domjoin_supported_os_families
-    fail_msg: "{{ ansible_os_family }} is not supported. Supported families are: {{ _domjoin_supported_os_families | join(', ') }}"
-    success_msg: "Some {{ ansible_os_family }}-based OS are supported. Checking specific OS."
+      - _domjoin_is_os_supported
+    fail_msg: "{{ ansible_distribution }} {{ ansible_distribution_version }} is not supported."
+    success_msg: "{{ ansible_distribution }} {{ ansible_distribution_version }} is from a supported OS family."
 
-- name: Validate EL version
+- name: Indicate OS is tested
   when:
-    - ansible_os_family == 'RedHat'
-  ansible.builtin.assert:
-    that:
-      - ansible_distribution_major_version in _domjoin_supported_el_major_versions
-    fail_msg: "{{ ansible_distribution }} {{ ansible_distribution_major_version }} is not supported. Supported versions are: {{ _domjoin_supported_el_major_versions | join(', ') }}"
-    success_msg: "{{ ansible_distribution }} {{ ansible_distribution_major_version }} is supported."
+    - _domjoin_is_tested
+  ansible.builtin.debug:
+    msg: "{{ ansible_distribution }} {{ ansible_distribution_version }} has been tested with this role."
 
-- name: Validate non-EL distribution
+- name: Warn if OS is not tested
   when:
-    - ansible_os_family != 'RedHat'
-  ansible.builtin.assert:
-    that:
-      - ansible_distribution in _domjoin_supported_non_el_distributions
-    fail_msg: "{{ ansible_distribution }} is not supported. Supported distributions are: {{ _domjoin_supported_non_el_distributions | join(', ') }}"
-    success_msg: "{{ ansible_distribution }} is supported."
-
-- name: Include EL variables
-  when:
-    - ansible_os_family == 'RedHat'
-  ansible.builtin.include_vars: RedHat.yml
-
-- name: Include non-EL variables
-  when:
-    - ansible_os_family != 'RedHat'
-  ansible.builtin.include_vars: "{{ ansible_distribution }}.yml"
+    - not _domjoin_is_tested
+  ansible.builtin.debug:
+    msg: "WARNING: {{ ansible_distribution }} {{ ansible_distribution_version }} is not tested."
+  changed_when: true

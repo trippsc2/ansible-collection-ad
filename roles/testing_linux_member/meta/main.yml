@@ -9,10 +9,18 @@ galaxy_info:
   min_ansible_version: '2.16'
 
   platforms:
-  - name: Windows
-    versions:
-      - '2019'
-      - '2022'
+    - name: Debian
+      versions:
+        - bookworm
+    - name: EL
+      versions:
+        - '9'
+        - '8'
+    - name: Ubuntu
+      versions:
+        - noble
+        - jammy
+        - focal
 
 collections:
   - community.windows

@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.6] - 2025-05-15
+
+### Role - linux_member
+
+- Changed OS validation.
+
 ## [2.3.5] - 2025-01-07
 
 ### Collection

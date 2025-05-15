@@ -1,15 +1,3 @@
 ---
-_domjoin_supported_os_families:
-  - RedHat
-  - Debian
-
-_domjoin_supported_el_major_versions:
-  - '8'
-  - '9'
-
-_domjoin_supported_non_el_distributions:
-  - Debian
-  - Ubuntu
-
 _domjoin_domain_join_command: >-
   /usr/sbin/realm join --user={{ domjoin_domain_user }} {% if domjoin_computer_ou is defined %}--computer-ou='{{ domjoin_computer_ou }}' {% endif %}{{ domjoin_domain_name | lower }}
