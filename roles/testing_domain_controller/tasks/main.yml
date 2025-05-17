@@ -71,7 +71,7 @@
           ZoneName: "{{ dc_reverse_lookup_zone_name }}"
 
     - name: Register PTR records for domain controller
-      community.windows.win_dns_record:
+      ansible.windows.win_dns_record:
         name: "{{ dc_reverse_lookup_zone_data }}"
         zone: "{{ dc_reverse_lookup_zone_name }}"
         type: PTR

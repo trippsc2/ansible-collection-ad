@@ -21,7 +21,7 @@
   when:
     - dns_register_host
   delegate_to: "{{ dc_inventory_name }}"
-  community.windows.win_dns_record:
+  ansible.windows.win_dns_record:
     name: "{{ dns_host_name }}"
     type: A
     value: "{{ dns_ip_address }}"

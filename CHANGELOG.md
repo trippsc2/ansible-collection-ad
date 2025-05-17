@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.8] - 2025-05-17
+
+### Role - testing_domain_controller
+
+- Changed **community.windows.win_dns_record** module references to **ansible.windows.win_dns_record**.
+
+### Role - testing_linux_member
+
+- Changed **community.windows.win_dns_record** module references to **ansible.windows.win_dns_record**.
+
+### Role - testing_standalone_win
+
+- Changed **community.windows.win_dns_record** module references to **ansible.windows.win_dns_record**.
+
+### Role - testing_win_member
+
+- Changed **community.windows.win_dns_record** module references to **ansible.windows.win_dns_record**.
+
 ## [2.3.7] - 2025-05-15
 
 ### Role - linux_member
