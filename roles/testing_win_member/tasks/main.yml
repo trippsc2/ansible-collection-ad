@@ -53,7 +53,7 @@
         - dc_copy_ssh_key_from_local_user
       block:
         - name: Create profile for domain user
-          community.windows.win_user_profile:
+          ansible.windows.win_user_profile:
             username: "{{ domain_join_username }}"
             state: present
           register: _create_profile

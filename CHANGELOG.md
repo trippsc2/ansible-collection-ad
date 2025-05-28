@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.4.0] - 2025-05-28
+
+### Role - testing_win_member
+
+- Changed references to **community.windows.win_user_profile** to **ansible.windows.win_user_profile**.
+
 ## [2.3.8] - 2025-05-17
 
 ### Role - testing_domain_controller
