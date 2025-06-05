@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.4.1] - 2025-06-05
+
+### Collection
+
+- Changed repository URL to use Github Organization.
+
 ## [2.4.0] - 2025-05-28
 
 ### Role - testing_win_member

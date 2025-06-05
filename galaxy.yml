@@ -1,7 +1,7 @@
 ---
 namespace: trippsc2
 name: ad
-version: 2.4.0
+version: 2.4.1
 readme: README.md
 authors:
   - Jim Tarpley (@trippsc2)
@@ -21,7 +21,7 @@ dependencies:
   trippsc2.hashi_vault: ">=1.0.0"
   trippsc2.windows: ">=1.0.0"
 
-repository: https://github.com/trippsc2/ansible-collection-ad.git
+repository: https://github.com/trippsoft/ansible-collection-ad.git
 
 manifest:
   directives:
