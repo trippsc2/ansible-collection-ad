@@ -1,0 +1,83 @@
+---
+name: Molecule - domain_controller role
+'on':
+  workflow_call: {}
+  workflow_dispatch: {}
+  pull_request:
+    branches:
+      - main
+    paths:
+      - roles/domain_controller/**
+      - '!roles/domain_controller/.aar_doc.yml'
+      - '!roles/domain_controller/README.md'
+      - '!roles/domain_controller/meta/argument_specs.yml'
+      - '!roles/domain_controller/meta/main.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - roles/domain_controller/**
+      - '!roles/domain_controller/.aar_doc.yml'
+      - '!roles/domain_controller/README.md'
+      - '!roles/domain_controller/meta/argument_specs.yml'
+      - '!roles/domain_controller/meta/main.yml'
+defaults:
+  run:
+    working-directory: 'trippsc2.ad'
+jobs:
+  molecule_existing:
+    name: Run Molecule tests - existing domain
+    runs-on:
+      - self-hosted
+      - linux
+      - x64
+    strategy:
+      fail-fast: false
+      matrix:
+        box:
+          - w2025_cis
+          - w2022_cis
+          - w2019_cis
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          path: 'trippsc2.ad'
+      - name: Run Molecule tests
+        run: |
+          source ~/venv/ansible-2.16/bin/activate
+          cd ./roles/domain_controller
+          molecule test
+          deactivate
+        env:
+          PY_COLORS: '1'
+          ANSIBLE_FORCE_COLOR: '1'
+          MOLECULE_BOX: ${{ matrix.box }}
+  molecule_new:
+    name: Run Molecule tests - new domain
+    runs-on:
+      - self-hosted
+      - linux
+      - x64
+    strategy:
+      fail-fast: false
+      matrix:
+        box:
+          - w2025_cis
+          - w2022_cis
+          - w2019_cis
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          path: 'trippsc2.ad'
+      - name: Run Molecule tests
+        run: |
+          source ~/venv/ansible-2.16/bin/activate
+          cd ./roles/domain_controller
+          molecule test -s new
+          deactivate
+        env:
+          PY_COLORS: '1'
+          ANSIBLE_FORCE_COLOR: '1'
+          MOLECULE_BOX: ${{ matrix.box }}

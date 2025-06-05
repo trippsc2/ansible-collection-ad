@@ -1,0 +1,44 @@
+---
+name: Molecule - testing_win_member role
+'on':
+  workflow_call: {}
+  workflow_dispatch: {}
+  pull_request:
+    branches:
+      - main
+    paths:
+      - roles/testing_win_member/**
+      - '!roles/testing_win_member/.aar_doc.yml'
+      - '!roles/testing_win_member/README.md'
+      - '!roles/testing_win_member/meta/argument_specs.yml'
+      - '!roles/testing_win_member/meta/main.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - roles/testing_win_member/**
+      - '!roles/testing_win_member/.aar_doc.yml'
+      - '!roles/testing_win_member/README.md'
+      - '!roles/testing_win_member/meta/argument_specs.yml'
+      - '!roles/testing_win_member/meta/main.yml'
+defaults:
+  run:
+    working-directory: 'trippsc2.ad'
+jobs:
+  molecule:
+    name: Run Molecule test
+    uses: trippsoft/github-actions/.github/workflows/molecule.yml@main
+    with:
+      working_directory: 'trippsc2.ad'
+      role_name: 'testing_win_member'
+      box: ${{ matrix.box }}
+    strategy:
+      fail-fast: false
+      matrix:
+        box:
+          - w2025_cis
+          - w2022_cis
+          - w2019_cis
+          - w11_24h2_base
+          - w11_23h2_base
+          - w10_22h2_base
