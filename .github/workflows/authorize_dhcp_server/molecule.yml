@@ -1,0 +1,41 @@
+---
+name: Molecule - authorize_dhcp_server role
+'on':
+  workflow_call: {}
+  workflow_dispatch: {}
+  pull_request:
+    branches:
+      - main
+    paths:
+      - roles/authorize_dhcp_server/**
+      - '!roles/authorize_dhcp_server/.aar_doc.yml'
+      - '!roles/authorize_dhcp_server/README.md'
+      - '!roles/authorize_dhcp_server/meta/argument_specs.yml'
+      - '!roles/authorize_dhcp_server/meta/main.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - roles/authorize_dhcp_server/**
+      - '!roles/authorize_dhcp_server/.aar_doc.yml'
+      - '!roles/authorize_dhcp_server/README.md'
+      - '!roles/authorize_dhcp_server/meta/argument_specs.yml'
+      - '!roles/authorize_dhcp_server/meta/main.yml'
+defaults:
+  run:
+    working-directory: 'trippsc2.ad'
+jobs:
+  molecule:
+    name: Run Molecule test
+    uses: trippsoft/github-actions/.github/workflows/molecule.yml@main
+    with:
+      working_directory: 'trippsc2.ad'
+      role_name: 'authorize_dhcp_server'
+      box: ${{ matrix.box }}
+    strategy:
+      fail-fast: false
+      matrix:
+        box:
+          - w2025_cis
+          - w2022_cis
+          - w2019_cis
