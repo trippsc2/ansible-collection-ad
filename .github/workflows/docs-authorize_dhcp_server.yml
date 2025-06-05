@@ -6,7 +6,7 @@ name: Generate Role Docs - authorize_dhcp_server role
     branches:
       - main
     paths:
-      - .github/workflows/role-docs-authorize_dhcp_server.yml
+      - .github/workflows/docs-authorize_dhcp_server.yml
       - galaxy.yml
       - roles/authorize_dhcp_server/.aar_doc.yml
       - roles/authorize_dhcp_server/meta/argument_specs.yml
@@ -15,7 +15,7 @@ name: Generate Role Docs - authorize_dhcp_server role
     branches:
       - main
     paths:
-      - .github/workflows/role-docs-authorize_dhcp_server.yml
+      - .github/workflows/docs-authorize_dhcp_server.yml
       - galaxy.yml
       - roles/authorize_dhcp_server/.aar_doc.yml
       - roles/authorize_dhcp_server/meta/argument_specs.yml
