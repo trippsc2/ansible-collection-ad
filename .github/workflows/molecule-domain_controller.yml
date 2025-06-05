@@ -7,6 +7,7 @@ name: Molecule - domain_controller role
     branches:
       - main
     paths:
+      - galaxy.yml
       - roles/domain_controller/**
       - '!roles/domain_controller/.aar_doc.yml'
       - '!roles/domain_controller/README.md'
@@ -16,6 +17,7 @@ name: Molecule - domain_controller role
     branches:
       - main
     paths:
+      - galaxy.yml
       - roles/domain_controller/**
       - '!roles/domain_controller/.aar_doc.yml'
       - '!roles/domain_controller/README.md'
@@ -50,8 +52,9 @@ jobs:
           molecule test
           deactivate
         env:
-          PY_COLORS: '1'
+          ANSIBLE_COLLECTIONS_PATH: ${{ github.workspace }}/domain_controller/collections:/usr/share/ansible/collections
           ANSIBLE_FORCE_COLOR: '1'
+          PY_COLORS: '1'
           MOLECULE_BOX: ${{ matrix.box }}
   molecule_new:
     name: Run Molecule tests - new domain
@@ -78,6 +81,7 @@ jobs:
           molecule test -s new
           deactivate
         env:
-          PY_COLORS: '1'
+          ANSIBLE_COLLECTIONS_PATH: ${{ github.workspace }}/domain_controller/collections:/usr/share/ansible/collections
           ANSIBLE_FORCE_COLOR: '1'
+          PY_COLORS: '1'
           MOLECULE_BOX: ${{ matrix.box }}

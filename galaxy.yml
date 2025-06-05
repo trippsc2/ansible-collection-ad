@@ -14,6 +14,7 @@ tags:
   - windows
 
 dependencies:
+  ansible.utils: ">=2.5.0"
   ansible.windows: ">=2.7.0"
   community.hashi_vault: ">=2.5.0"
   community.windows: ">=2.7.0"

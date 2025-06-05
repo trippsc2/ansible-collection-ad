@@ -7,6 +7,7 @@ name: Molecule - testing_domain_controller role
     branches:
       - main
     paths:
+      - galaxy.yml
       - roles/testing_domain_controller/**
       - '!roles/testing_domain_controller/.aar_doc.yml'
       - '!roles/testing_domain_controller/README.md'
@@ -16,6 +17,7 @@ name: Molecule - testing_domain_controller role
     branches:
       - main
     paths:
+      - galaxy.yml
       - roles/testing_domain_controller/**
       - '!roles/testing_domain_controller/.aar_doc.yml'
       - '!roles/testing_domain_controller/README.md'

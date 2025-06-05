@@ -7,6 +7,7 @@ name: Molecule - authorize_dhcp_server role
     branches:
       - main
     paths:
+      - galaxy.yml
       - roles/authorize_dhcp_server/**
       - '!roles/authorize_dhcp_server/.aar_doc.yml'
       - '!roles/authorize_dhcp_server/README.md'
@@ -16,6 +17,7 @@ name: Molecule - authorize_dhcp_server role
     branches:
       - main
     paths:
+      - galaxy.yml
       - roles/authorize_dhcp_server/**
       - '!roles/authorize_dhcp_server/.aar_doc.yml'
       - '!roles/authorize_dhcp_server/README.md'

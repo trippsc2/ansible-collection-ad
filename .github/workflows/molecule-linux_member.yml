@@ -7,6 +7,7 @@ name: Molecule - linux_member role
     branches:
       - main
     paths:
+      - galaxy.yml
       - roles/linux_member/**
       - '!roles/linux_member/.aar_doc.yml'
       - '!roles/linux_member/README.md'
@@ -16,6 +17,7 @@ name: Molecule - linux_member role
     branches:
       - main
     paths:
+      - galaxy.yml
       - roles/linux_member/**
       - '!roles/linux_member/.aar_doc.yml'
       - '!roles/linux_member/README.md'
