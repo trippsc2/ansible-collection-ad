@@ -1,7 +1,7 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 
 # Ansible Role: trippsc2.ad.linux_member
-Version: 2.4.0
+Version: 2.4.1
 
 This role joins a Linux system to an Active Directory domain.
 
