@@ -48,13 +48,12 @@ jobs:
       - name: Run Molecule tests
         run: |
           source ~/venv/ansible-2.16/bin/activate
-          mkdir -p ${{ github.workspace }}/collections/ansible_collections
+          rm -rf ~/.ansible/collections/ansible_collections/*
           cd ./roles/domain_controller
           molecule test
-          rm -rf ${{ github.workspace }}/collections/ansible_collections/*
+          rm -rf ~/.ansible/collections/ansible_collections/*
           deactivate
         env:
-          ANSIBLE_COLLECTIONS_PATH: ${{ github.workspace }}/collections:/usr/share/ansible/collections
           ANSIBLE_FORCE_COLOR: '1'
           PY_COLORS: '1'
           MOLECULE_BOX: ${{ matrix.box }}
@@ -79,13 +78,12 @@ jobs:
       - name: Run Molecule tests
         run: |
           source ~/venv/ansible-2.16/bin/activate
-          mkdir -p ${{ github.workspace }}/collections/ansible_collections
+          rm -rf ~/.ansible/collections/ansible_collections/*
           cd ./roles/domain_controller
           molecule test -s new
-          rm -rf ${{ github.workspace }}/collections/ansible_collections/*
+          rm -rf ~/.ansible/collections/ansible_collections/*
           deactivate
         env:
-          ANSIBLE_COLLECTIONS_PATH: ${{ github.workspace }}/collections:/usr/share/ansible/collections
           ANSIBLE_FORCE_COLOR: '1'
           PY_COLORS: '1'
           MOLECULE_BOX: ${{ matrix.box }}
