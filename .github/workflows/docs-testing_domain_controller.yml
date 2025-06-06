@@ -7,7 +7,6 @@ name: Generate Role Docs - testing_domain_controller role
       - main
     paths:
       - .github/workflows/docs-testing_domain_controller.yml
-      - galaxy.yml
       - roles/testing_domain_controller/.aar_doc.yml
       - roles/testing_domain_controller/meta/argument_specs.yml
       - roles/testing_domain_controller/meta/main.yml
@@ -16,7 +15,6 @@ name: Generate Role Docs - testing_domain_controller role
       - main
     paths:
       - .github/workflows/docs-testing_domain_controller.yml
-      - galaxy.yml
       - roles/testing_domain_controller/.aar_doc.yml
       - roles/testing_domain_controller/meta/argument_specs.yml
       - roles/testing_domain_controller/meta/main.yml

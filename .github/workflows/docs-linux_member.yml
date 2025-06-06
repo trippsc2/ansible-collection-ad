@@ -7,7 +7,6 @@ name: Generate Role Docs - linux_member role
       - main
     paths:
       - .github/workflows/docs-linux_member.yml
-      - galaxy.yml
       - roles/linux_member/.aar_doc.yml
       - roles/linux_member/meta/argument_specs.yml
       - roles/linux_member/meta/main.yml
@@ -16,7 +15,6 @@ name: Generate Role Docs - linux_member role
       - main
     paths:
       - .github/workflows/docs-linux_member.yml
-      - galaxy.yml
       - roles/linux_member/.aar_doc.yml
       - roles/linux_member/meta/argument_specs.yml
       - roles/linux_member/meta/main.yml

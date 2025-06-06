@@ -7,7 +7,6 @@ name: Generate Role Docs - testing_standalone_win role
       - main
     paths:
       - .github/workflows/docs-testing_standalone_win.yml
-      - galaxy.yml
       - roles/testing_standalone_win/.aar_doc.yml
       - roles/testing_standalone_win/meta/argument_specs.yml
       - roles/testing_standalone_win/meta/main.yml
@@ -16,7 +15,6 @@ name: Generate Role Docs - testing_standalone_win role
       - main
     paths:
       - .github/workflows/docs-testing_standalone_win.yml
-      - galaxy.yml
       - roles/testing_standalone_win/.aar_doc.yml
       - roles/testing_standalone_win/meta/argument_specs.yml
       - roles/testing_standalone_win/meta/main.yml
