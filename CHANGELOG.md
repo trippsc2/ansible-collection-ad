@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Collection
 
-- Changed repository URL to use Github Organization.
+- Changed repository URL to use GitHub Organization.
 
 ## [2.4.0] - 2025-05-28
 
