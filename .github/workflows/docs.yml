@@ -28,6 +28,7 @@ jobs:
     name: Generate domain_controller role documentation
     permissions:
       contents: write
+    needs: docs_authorize_dhcp_server
     uses: trippsoft/github-actions/.github/workflows/role-docs.yml@main
     with:
       working_directory: 'trippsc2.ad'
@@ -36,6 +37,7 @@ jobs:
     name: Generate linux_member role documentation
     permissions:
       contents: write
+    needs: docs_domain_controller
     uses: trippsoft/github-actions/.github/workflows/role-docs.yml@main
     with:
       working_directory: 'trippsc2.ad'
@@ -44,6 +46,7 @@ jobs:
     name: Generate rotate_ad_user_password role documentation
     permissions:
       contents: write
+    needs: docs_linux_member
     uses: trippsoft/github-actions/.github/workflows/role-docs.yml@main
     with:
       working_directory: 'trippsc2.ad'
@@ -52,6 +55,7 @@ jobs:
     name: Generate testing_domain_controller role documentation
     permissions:
       contents: write
+    needs: docs_rotate_ad_user_password
     uses: trippsoft/github-actions/.github/workflows/role-docs.yml@main
     with:
       working_directory: 'trippsc2.ad'
@@ -60,6 +64,7 @@ jobs:
     name: Generate testing_linux_member role documentation
     permissions:
       contents: write
+    needs: docs_testing_domain_controller
     uses: trippsoft/github-actions/.github/workflows/role-docs.yml@main
     with:
       working_directory: 'trippsc2.ad'
@@ -68,6 +73,7 @@ jobs:
     name: Generate testing_standalone_win role documentation
     permissions:
       contents: write
+    needs: docs_testing_linux_member
     uses: trippsoft/github-actions/.github/workflows/role-docs.yml@main
     with:
       working_directory: 'trippsc2.ad'
@@ -76,6 +82,7 @@ jobs:
     name: Generate testing_win_member role documentation
     permissions:
       contents: write
+    needs: docs_testing_standalone_win
     uses: trippsoft/github-actions/.github/workflows/role-docs.yml@main
     with:
       working_directory: 'trippsc2.ad'
