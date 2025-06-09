@@ -2,14 +2,6 @@
 name: Generate Role Docs - testing_domain_controller role
 'on':
   workflow_dispatch: {}
-  pull_request:
-    branches:
-      - main
-    paths:
-      - .github/workflows/docs-testing_domain_controller.yml
-      - roles/testing_domain_controller/.aar_doc.yml
-      - roles/testing_domain_controller/meta/argument_specs.yml
-      - roles/testing_domain_controller/meta/main.yml
   push:
     branches:
       - main

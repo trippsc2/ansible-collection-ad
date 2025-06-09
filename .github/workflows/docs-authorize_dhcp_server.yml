@@ -2,14 +2,6 @@
 name: Generate Role Docs - authorize_dhcp_server role
 'on':
   workflow_dispatch: {}
-  pull_request:
-    branches:
-      - main
-    paths:
-      - .github/workflows/docs-authorize_dhcp_server.yml
-      - roles/authorize_dhcp_server/.aar_doc.yml
-      - roles/authorize_dhcp_server/meta/argument_specs.yml
-      - roles/authorize_dhcp_server/meta/main.yml
   push:
     branches:
       - main
