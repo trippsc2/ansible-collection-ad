@@ -7,6 +7,38 @@ name: Generate Role Docs
       - main
     paths:
       - galaxy.yml
+      - roles/authorize_dhcp_server/.aar_doc.yml
+      - roles/authorize_dhcp_server/README.md
+      - roles/authorize_dhcp_server/meta/argument_specs.yml
+      - roles/authorize_dhcp_server/meta/main.yml
+      - roles/domain_controller/.aar_doc.yml
+      - roles/domain_controller/README.md
+      - roles/domain_controller/meta/argument_specs.yml
+      - roles/domain_controller/meta/main.yml
+      - roles/linux_member/.aar_doc.yml
+      - roles/linux_member/README.md
+      - roles/linux_member/meta/argument_specs.yml
+      - roles/linux_member/meta/main.yml
+      - roles/rotate_ad_user_password/.aar_doc.yml
+      - roles/rotate_ad_user_password/README.md
+      - roles/rotate_ad_user_password/meta/argument_specs.yml
+      - roles/rotate_ad_user_password/meta/main.yml
+      - roles/testing_domain_controller/.aar_doc.yml
+      - roles/testing_domain_controller/README.md
+      - roles/testing_domain_controller/meta/argument_specs.yml
+      - roles/testing_domain_controller/meta/main.yml
+      - roles/testing_linux_member/.aar_doc.yml
+      - roles/testing_linux_member/README.md
+      - roles/testing_linux_member/meta/argument_specs.yml
+      - roles/testing_linux_member/meta/main.yml
+      - roles/testing_standalone_win/.aar_doc.yml
+      - roles/testing_standalone_win/README.md
+      - roles/testing_standalone_win/meta/argument_specs.yml
+      - roles/testing_standalone_win/meta/main.yml
+      - roles/testing_win_member/.aar_doc.yml
+      - roles/testing_win_member/README.md
+      - roles/testing_win_member/meta/argument_specs.yml
+      - roles/testing_win_member/meta/main.yml
 defaults:
   run:
     working-directory: 'trippsc2.adcs'
