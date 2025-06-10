@@ -1,7 +1,7 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 
 # Ansible Role: trippsc2.ad.rotate_ad_user_password
-Version: 2.4.1
+Version: 2.4.2
 
 This role rotates the password for an Active Directory user.
 
@@ -15,9 +15,7 @@ This role rotates the password for an Active Directory user.
 
 | Collection |
 | ---------- |
-| ansible.windows |
 | community.hashi_vault |
-| community.windows |
 | microsoft.ad |
 | trippsc2.hashi_vault |
 
