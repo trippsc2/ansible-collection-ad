@@ -1,7 +1,7 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 
 # Ansible Role: trippsc2.ad.testing_domain_controller
-Version: 2.4.1
+Version: 2.4.2
 
 This role creates an Active Directory domain on the Windows machine for use during Molecule testing.
 
@@ -16,7 +16,6 @@ This role creates an Active Directory domain on the Windows machine for use duri
 | Collection |
 | ---------- |
 | ansible.windows |
-| community.windows |
 | microsoft.ad |
 
 ## Role Arguments
