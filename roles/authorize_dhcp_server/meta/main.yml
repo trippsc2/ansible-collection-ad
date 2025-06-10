@@ -16,7 +16,9 @@ galaxy_info:
         - '2019'
 
 collections:
+  - ansible.utils
   - ansible.windows
+  - community.general
   - community.windows
   - trippsc2.windows
 

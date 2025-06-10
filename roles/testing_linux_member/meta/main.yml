@@ -23,6 +23,6 @@ galaxy_info:
         - focal
 
 collections:
-  - community.windows
+  - ansible.windows
 
 dependencies: []

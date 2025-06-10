@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.4.2] - 2025-06-10
+
+### Collection
+
+- Corrected missing or extra dependencies.
+
 ## [2.4.1] - 2025-06-06
 
 ### Collection
