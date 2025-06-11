@@ -1,6 +1,6 @@
 ---
 _domjoin_is_os_supported: true
-_domjoin_is_tested: true
+_domjoin_is_tested: false
 
 _domjoin_packages:
   - adcli
