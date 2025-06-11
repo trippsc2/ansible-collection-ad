@@ -43,4 +43,3 @@ jobs:
           - rocky8_cis
           - ubuntu2404_base
           - ubuntu2204_base
-          - ubuntu2004_base
