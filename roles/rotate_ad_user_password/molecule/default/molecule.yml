@@ -15,7 +15,7 @@ platforms:
     provider_options:
       default_prefix: ad_rotate_user_password_
   - name: dc
-    box: jtarpley/${MOLECULE_BOX:-w2022_cis}
+    box: jtarpley/${MOLECULE_BOX:-w2025_cis}
     memory: 2048
     cpus: 2
     provider_options:

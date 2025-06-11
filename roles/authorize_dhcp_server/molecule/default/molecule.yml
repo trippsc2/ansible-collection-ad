@@ -9,7 +9,7 @@ driver:
   parallel: true
 platforms:
   - name: dc
-    box: jtarpley/${MOLECULE_BOX:-w2022_cis}
+    box: jtarpley/${MOLECULE_BOX:-w2025_cis}
     memory: 2048
     cpus: 2
     provider_options:
@@ -18,7 +18,7 @@ platforms:
       - windows
       - windows_domain
   - name: win
-    box: jtarpley/${MOLECULE_BOX:-w2022_cis}
+    box: jtarpley/${MOLECULE_BOX:-w2025_cis}
     memory: 2048
     cpus: 2
     provider_options:
